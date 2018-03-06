@@ -1,7 +1,7 @@
 README, Baca Saya. . .
 ======================================================================================================
 
-SISFO-TOKO v2.1 (Pebruari 2011) adalah sistem informasi manajemen Usaha Toko.
+SISFO-TOKO v2.1 adalah sistem informasi manajemen Usaha Toko.
 Hanya dibutuhkan sebuah WebServer (Apache+PHP+MySQL) untuk menjalankan aplikasi ini.
 
 
@@ -23,8 +23,8 @@ Berikut beberapa contoh akses :
 		pass : admin
 
 	kasir/pembuat nota
-		user : admin
-		pass : admin
+		user : 1
+		pass : 1
 
 
 
@@ -47,8 +47,7 @@ Salam,
 Agus Muhajir,S.Kom
 [SISFO-TOKO Developer].
 [URL 		: http://hajirodeon.wordpress.com/].
-[Group 		: http://yahoogroup.com/groups/linuxbiasawae/].
 [E-Mail		: hajirodeon@yahoo.com, hajirodeon@gmail.com].
-[Facebook	: hajirodeon@yahoo.com].
-[HP/SMS		: 081-829-88-54].
+[Facebook/Twitter   : hajirodeon].
+[HP/SMS/WA/TELEGRAM : 081-829-88-54].
 ======================================================================================================
