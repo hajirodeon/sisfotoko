@@ -1,0 +1,30 @@
+# php.ini ############################################################################
+error_reporting  =  E_ALL & ~E_NOTICE
+variables_order = "EGPCS"
+register_long_arrays = On
+register_argc_argv = On
+auto_globals_jit = On
+
+max_execution_time = 600
+max_input_time = 600
+memory_limit = 64M
+
+display_errors = Off
+log_errors = On
+error_log = syslog
+implicit_flush = On
+output_buffering = 4096
+
+session.save_handler = files
+session.use_cookies = 1
+session.name = SISFOKOLID
+session.auto_start = 0
+session.cookie_lifetime = 0
+session.cache_limiter = nocache
+session.cache_expire = 180
+
+allow_url_fopen = On
+
+file_uploads = On
+upload_max_filesize = 10M
+# php.ini ############################################################################
