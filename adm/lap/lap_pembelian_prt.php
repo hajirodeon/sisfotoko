@@ -49,7 +49,7 @@ $diload = "window.print();location.href='$ke';";
 ob_start();
 
 //query
-$qdata = mysql_query("SELECT beli.*, beli_detail.*, ".
+$qdata = mysqli_query($koneksi, "SELECT beli.*, beli_detail.*, ".
 						"beli_detail.kd AS ndkd, ".
 						"beli_detail.qty AS ndqty, ".
 						"m_brg.*, m_satuan.*, stock.* ".
@@ -60,8 +60,8 @@ $qdata = mysql_query("SELECT beli.*, beli_detail.*, ".
 						"AND stock.kd_brg = m_brg.kd ".
 						"AND beli.kd = '$belkd' ".
 						"ORDER BY beli_detail.bonus DESC, m_brg.kode ASC");
-$rdata = mysql_fetch_assoc($qdata);
-$tdata = mysql_num_rows($qdata);
+$rdata = mysqli_fetch_assoc($qdata);
+$tdata = mysqli_num_rows($qdata);
 
 
 
@@ -78,14 +78,14 @@ echo '</td>
 
 
 //terpilih
-$qtru = mysql_query("SELECT beli.*, beli.kd AS belkd, m_supplier.*  ".
+$qtru = mysqli_query($koneksi, "SELECT beli.*, beli.kd AS belkd, m_supplier.*  ".
 						"FROM beli, m_supplier ".
 						"WHERE beli.kd_supplier = m_supplier.kd ".
 						"AND round(DATE_FORMAT(beli.tgl_beli, '%d')) = '$xtgl1' ".
 						"AND round(DATE_FORMAT(beli.tgl_beli, '%m')) = '$xbln1' ".
 						"AND round(DATE_FORMAT(beli.tgl_beli, '%Y')) = '$xthn1' ".
 						"AND beli.kd = '$belkd'");
-$rtru = mysql_fetch_assoc($qtru);
+$rtru = mysqli_fetch_assoc($qtru);
 $x_belkd = $belkd;
 $x_no_faktur = balikin($rtru['no_faktur']);
 $x_supplier = balikin($rtru['singkatan']);
@@ -98,11 +98,11 @@ $x_tgl_lunas = $rtru['tgl_lunas'];
 $x_kd_byr = nosql($rtru['kd_jns_byr']);
 
 //total sementara
-$qduwi = mysql_query("SELECT SUM(subtotal) AS subtotal ".
+$qduwi = mysqli_query($koneksi, "SELECT SUM(subtotal) AS subtotal ".
 						"FROM beli_detail ".
 						"WHERE kd_beli = '$x_belkd' ".
 						"AND bonus = 'false'");
-$rduwi = mysql_fetch_assoc($qduwi);
+$rduwi = mysqli_fetch_assoc($qduwi);
 $x_total_beli = nosql($rduwi['subtotal']);
 $x_total_diskon = round((($x_diskon * $x_total_beli)/100),2);
 $x_total_bayar = round(nosql($rtru['total_bayar']),2);
@@ -113,10 +113,10 @@ $x_total_bayar = round($x_total_ppn,2);
 
 
 //jenis pembayaran
-$qwow = mysql_query("SELECT * FROM m_jns_byr ".
+$qwow = mysqli_query($koneksi, "SELECT * FROM m_jns_byr ".
 						"WHERE kd = '$x_kd_byr'");
-$rwow = mysql_fetch_assoc($qwow);
-$qwow = mysql_num_rows($qwow);
+$rwow = mysqli_fetch_assoc($qwow);
+$qwow = mysqli_num_rows($qwow);
 $wow_jns = balikin($rwow['jns_byr']);
 
 
@@ -206,7 +206,7 @@ if ($tdata != 0)
 		</td>
         </tr>';
 		}
-	while ($rdata = mysql_fetch_assoc($qdata));
+	while ($rdata = mysqli_fetch_assoc($qdata));
 	}
 	echo '</table>';
 

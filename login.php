@@ -61,11 +61,11 @@ if ($_POST['btnOK'])
 		//jika kasir/pembuat nota /////////////////////////////////////////////////////////////////////
 		if ($tipe == "tp01")
 			{
-			$q = mysql_query("SELECT * FROM admks ".
+			$q = mysqli_query($koneksi, "SELECT * FROM admks ".
 						"WHERE username = '$username' ".
 						"AND password = '$password'");
-			$row = mysql_fetch_assoc($q);
-			$total = mysql_num_rows($q);
+			$row = mysqli_fetch_assoc($q);
+			$total = mysqli_num_rows($q);
 
 			//cek login
 			if ($total != 0)
@@ -80,7 +80,7 @@ if ($_POST['btnOK'])
 				$_SESSION['hajirobe2_session'] = $hajirobe;
 
 				//time login
-				mysql_query("UPDATE admks SET time_login = '$today' ".
+				mysqli_query($koneksi, "UPDATE admks SET time_login = '$today' ".
 						"WHERE username = '$username' ".
 						"AND password = '$password'");
 
@@ -110,11 +110,11 @@ if ($_POST['btnOK'])
 		else if ($tipe == "tp02")
 			{
 			//admin
-			$q = mysql_query("SELECT * FROM admin ".
+			$q = mysqli_query($koneksi, "SELECT * FROM admin ".
 						"WHERE username = '$username' ".
 						"AND password = '$password'");
-			$row = mysql_fetch_assoc($q);
-			$total = mysql_num_rows($q);
+			$row = mysqli_fetch_assoc($q);
+			$total = mysqli_num_rows($q);
 
 			//cek login
 			if ($total != 0)
@@ -130,7 +130,7 @@ if ($_POST['btnOK'])
 				$_SESSION['hajirobe1_session'] = $hajirobe;
 
 				//time login
-				mysql_query("UPDATE admin SET time_login = '$today' ".
+				mysqli_query($koneksi, "UPDATE admin SET time_login = '$today' ".
 						"WHERE username = '$username' ".
 						"AND password = '$password'");
 
@@ -207,7 +207,7 @@ Password :
 <table width="990" bgcolor="'.$warna02.'" border="0" cellspacing="5" cellpadding="0">
 <tr valign="top">
 <td>
-&copy;2017. <strong>{versi}</strong>
+&copy;2021. <strong>{versi}</strong>
 </td>
 </tr>
 </table>

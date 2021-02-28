@@ -55,11 +55,11 @@ if ($_POST['btnHPS'])
 	else
 		{
 		//hapus di table : admin
-		mysql_query("DELETE FROM admin ".
+		mysqli_query($koneksi, "DELETE FROM admin ".
 						"WHERE kd = '$item'");
 
 		//hapus di tabel : akses_admin
-		mysql_query("DELETE FROM akses_admin ".
+		mysqli_query($koneksi, "DELETE FROM akses_admin ".
 						"WHERE kd_admin = '$item'");
 
 		//null-kan
@@ -103,10 +103,10 @@ if ($_POST['btnBR'])
 	//cek, suda ada user trsebut...?
 	else
 		{
-		$qcc = mysql_query("SELECT * FROM admin ".
+		$qcc = mysqli_query($koneksi, "SELECT * FROM admin ".
 								"WHERE username = '$xuserx'");
-		$rcc = mysql_fetch_assoc($qcc);
-		$tcc = mysql_num_rows($qcc);
+		$rcc = mysqli_fetch_assoc($qcc);
+		$tcc = mysqli_num_rows($qcc);
 
 		//nek iya
 		if ($tcc != 0)
@@ -123,7 +123,7 @@ if ($_POST['btnBR'])
 			}
 		else //nek gak, simpan aja yg baru
 			{
-			mysql_query("INSERT INTO admin(kd, username, password, postdate) VALUES ".
+			mysqli_query($koneksi, "INSERT INTO admin(kd, username, password, postdate) VALUES ".
 							"('$x', '$xuserx', '$xpassx', '$today')");
 
 			//null-kan
@@ -158,13 +158,13 @@ if ($_POST['btnRST'])
 	else
 		{
 		//username e...
-		$qstu = mysql_query("SELECT * FROM admin ".
+		$qstu = mysqli_query($koneksi, "SELECT * FROM admin ".
 								"WHERE kd = '$item'");
-		$rstu = mysql_fetch_assoc($qstu);
+		$rstu = mysqli_fetch_assoc($qstu);
 		$stunama = nosql($rstu['username']);
 
 		//reset password
-		mysql_query("UPDATE admin SET password = '$passbrx', ".
+		mysqli_query($koneksi, "UPDATE admin SET password = '$passbrx', ".
 						"postdate = '$today' ".
 						"WHERE kd = '$item'");
 
@@ -234,11 +234,11 @@ RE-Password : <br>
 </tr>';
 
 //user
-$qdm = mysql_query("SELECT * FROM admin ".
+$qdm = mysqli_query($koneksi, "SELECT * FROM admin ".
 						"WHERE username <> 'admin' ".
 						"ORDER BY username ASC");
-$rdm = mysql_fetch_assoc($qdm);
-$tdm = mysql_num_rows($qdm);
+$rdm = mysqli_fetch_assoc($qdm);
+$tdm = mysqli_num_rows($qdm);
 
 //nek gak null
 if ($tdm != 0)
@@ -275,7 +275,7 @@ if ($tdm != 0)
 		</td>
 		</tr>';
 		}
-	while ($rdm = mysql_fetch_assoc($qdm));
+	while ($rdm = mysqli_fetch_assoc($qdm));
 	}
 
 

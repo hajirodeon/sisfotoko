@@ -90,10 +90,10 @@ if ($_POST['btnSMP'])
 		}
 	else
 		{ ///cek
-		$qcc = mysql_query("SELECT * FROM m_kastumer ".
+		$qcc = mysqli_query($koneksi, "SELECT * FROM m_kastumer ".
 								"WHERE nama = '$nama'");
-		$rcc = mysql_fetch_assoc($qcc);
-		$tcc = mysql_num_rows($qcc);
+		$rcc = mysqli_fetch_assoc($qcc);
+		$tcc = mysqli_num_rows($qcc);
 
 
 		//nek duplikasi, lebih dari 1
@@ -124,7 +124,7 @@ if ($_POST['btnSMP'])
 				}
 			else
 				{
-				mysql_query("INSERT INTO m_kastumer(kd, nama, singkatan, alamat, telp, hp, fax, email, ".
+				mysqli_query($koneksi, "INSERT INTO m_kastumer(kd, nama, singkatan, alamat, telp, hp, fax, email, ".
 								"cp_nama, cp_alamat, cp_telp, cp_hp, cp_fax, cp_email) VALUES ".
 								"('$x', '$nama', '$singkatan', '$alamat', '$telp', '$hp', '$fax', '$email', ".
 								"'$cp_nama', '$cp_alamat', '$cp_telp', '$cp_hp', '$cp_fax', '$cp_email')");

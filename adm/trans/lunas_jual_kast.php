@@ -84,19 +84,19 @@ echo '</td>
 echo "<select name=\"kastumer\" onChange=\"MM_jumpMenu('self',this,0)\">";
 
 //terpilih
-$qkastx = mysql_query("SELECT * FROM m_kastumer ".
+$qkastx = mysqli_query($koneksi, "SELECT * FROM m_kastumer ".
 						"WHERE kd = '$kastkd'");
-$rkastx = mysql_fetch_assoc($qkastx);
+$rkastx = mysqli_fetch_assoc($qkastx);
 $kastx_nm = balikin($rkastx['singkatan']);
 
 
 echo '<option value="'.$kastkd.'" selected>'.$kastx_nm.'</option>';
 
 //query
-$qkast = mysql_query("SELECT * FROM m_kastumer ".
+$qkast = mysqli_query($koneksi, "SELECT * FROM m_kastumer ".
 						"WHERE kd <> '$kastkd' ".
 						"ORDER BY singkatan ASC");
-$rkast = mysql_fetch_assoc($qkast);
+$rkast = mysqli_fetch_assoc($qkast);
 
 do
 	{
@@ -104,7 +104,7 @@ do
 	$x_nm = balikin($rkast['singkatan']);
 	echo '<option value="'.$filenya.'?kastkd='.$x_kd.'">'.$x_nm.'</option>';
 	}
-while ($rkast = mysql_fetch_assoc($qkast));
+while ($rkast = mysqli_fetch_assoc($qkast));
 
 echo '</select>
 </td>
@@ -135,12 +135,12 @@ else
 					"ORDER BY tgl_jual DESC";
 	$sqlresult = $sqlcount;
 
-	$count = mysql_num_rows(mysql_query($sqlcount));
+	$count = mysqli_num_rows(mysqli_query($sqlcount));
 	$pages = $p->findPages($count, $limit);
-	$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+	$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 	$target = "$filenya?kastkd=$kastkd";
 	$pagelist = $p->pageList($_GET['page'], $pages, $target);
-	$data = mysql_fetch_array($result);
+	$data = mysqli_fetch_array($result);
 
 	if ($count != 0)
 		{
@@ -213,9 +213,9 @@ else
 
 			<td align="center">';
 			//terpilih
-			$qbyrx = mysql_query("SELECT * FROM m_jns_byr ".
+			$qbyrx = mysqli_query($koneksi, "SELECT * FROM m_jns_byr ".
 									"WHERE kd = '$y_kd_byr'");
-			$rbyrx = mysql_fetch_assoc($qbyrx);
+			$rbyrx = mysqli_fetch_assoc($qbyrx);
 			$byrx_nm = balikin($rbyrx['jns_byr']);
 
 			echo $byrx_nm;
@@ -232,7 +232,7 @@ else
 
 			</tr>';
 			}
-		while ($data = mysql_fetch_assoc($result));
+		while ($data = mysqli_fetch_assoc($result));
 
 		echo '</table>
 		<table width="800" border="0" cellspacing="0" cellpadding="3">

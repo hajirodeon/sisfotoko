@@ -56,19 +56,19 @@ else if (empty($xthn1))
 else
 	{
 	//netralkan dahulu...!!
-	mysql_query("DELETE FROM item_laris ".
+	mysqli_query($koneksi, "DELETE FROM item_laris ".
 					"WHERE round(bln) = '$xbln1' ".
 					"AND round(thn) = '$xthn1'");
 
 
 	//ambil data dari nota //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	$qnot = mysql_query("SELECT DISTINCT(nota_detail.kd_brg) AS brgkd ".
+	$qnot = mysqli_query($koneksi, "SELECT DISTINCT(nota_detail.kd_brg) AS brgkd ".
 							"FROM nota, nota_detail ".
 							"WHERE nota_detail.kd_nota = nota.kd ".
 							"AND round(DATE_FORMAT(nota.tgl, '%m')) = '$xbln1' ".
 							"AND round(DATE_FORMAT(nota.tgl, '%Y')) = '$xthn1'");
-	$rnot = mysql_fetch_assoc($qnot);
-	$tnot = mysql_num_rows($qnot);
+	$rnot = mysqli_fetch_assoc($qnot);
+	$tnot = mysqli_num_rows($qnot);
 
 	//nek ada
 	if ($tnot != 0)
@@ -81,36 +81,36 @@ else
 			$n_brgkd = nosql($rnot['brgkd']);
 
 			//qty-ne...
-			$qnotx = mysql_query("SELECT SUM(nota_detail.qty) AS qty ".
+			$qnotx = mysqli_query($koneksi, "SELECT SUM(nota_detail.qty) AS qty ".
 									"FROM nota, nota_detail ".
 									"WHERE nota_detail.kd_nota = nota.kd ".
 									"AND nota_detail.kd_brg = '$n_brgkd' ".
 									"AND round(DATE_FORMAT(nota.tgl, '%m')) = '$xbln1' ".
 									"AND round(DATE_FORMAT(nota.tgl, '%Y')) = '$xthn1'");
-			$rnotx = mysql_fetch_assoc($qnotx);
-			$tnotx = mysql_num_rows($qnotx);
+			$rnotx = mysqli_fetch_assoc($qnotx);
+			$tnotx = mysqli_num_rows($qnotx);
 
 			//nilai qty
 			$n_qty = nosql($rnotx['qty']);
 
 			//masukkan
-			mysql_query("INSERT INTO item_laris(kd, bln, thn, kd_brg, jml) VALUES ".
+			mysqli_query($koneksi, "INSERT INTO item_laris(kd, bln, thn, kd_brg, jml) VALUES ".
 							"('$xx', '$xbln1', '$xthn1', '$n_brgkd', '$n_qty')");
 			}
-		while ($rnot = mysql_fetch_assoc($qnot));
+		while ($rnot = mysqli_fetch_assoc($qnot));
 		}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
 	//ambil data dari penjualan, utk 'terlaris' /////////////////////////////////////////////////////////////////////////////////////////
-	$qrisa = mysql_query("SELECT DISTINCT(jual_detail.kd_brg) AS brgkd ".
+	$qrisa = mysqli_query($koneksi, "SELECT DISTINCT(jual_detail.kd_brg) AS brgkd ".
 							"FROM jual, jual_detail ".
 							"WHERE jual_detail.kd_jual = jual.kd ".
 							"AND round(DATE_FORMAT(jual.tgl_jual, '%m')) = '$xbln1' ".
 							"AND round(DATE_FORMAT(jual.tgl_jual, '%Y')) = '$xthn1'");
-	$rrisa = mysql_fetch_assoc($qrisa);
-	$trisa = mysql_num_rows($qrisa);
+	$rrisa = mysqli_fetch_assoc($qrisa);
+	$trisa = mysqli_num_rows($qrisa);
 
 	//nek ada
 	if ($trisa != 0)
@@ -124,22 +124,22 @@ else
 
 
 			//qty
-			$qrisax = mysql_query("SELECT SUM(jual_detail.qty) AS qty ".
+			$qrisax = mysqli_query($koneksi, "SELECT SUM(jual_detail.qty) AS qty ".
 										"FROM jual, jual_detail ".
 										"WHERE jual_detail.kd_jual = jual.kd ".
 										"AND jual_detail.kd_brg = '$j_brgkd' ".
 										"AND round(DATE_FORMAT(jual.tgl_jual, '%m')) = '$xbln1' ".
 										"AND round(DATE_FORMAT(jual.tgl_jual, '%Y')) = '$xthn1'");
-			$rrisax = mysql_fetch_assoc($qrisax);
+			$rrisax = mysqli_fetch_assoc($qrisax);
 			$j_qty = nosql($rrisax['qty']);
 
 			//cek
-			$qcc = mysql_query("SELECT * FROM item_laris ".
+			$qcc = mysqli_query($koneksi, "SELECT * FROM item_laris ".
 									"WHERE round(bln) = '$xbln1' ".
 									"AND round(thn) = '$xthn1' ".
 									"AND kd_brg = '$j_brgkd'");
-			$rcc = mysql_fetch_assoc($qcc);
-			$tcc = mysql_num_rows($qcc);
+			$rcc = mysqli_fetch_assoc($qcc);
+			$tcc = mysqli_num_rows($qcc);
 
 			//nek ada, update aja
 			if ($tcc != 0)
@@ -151,18 +151,18 @@ else
 				$qty_br = $cc_qty + $j_qty;
 
 				//nilai baru
-				mysql_query("UPDATE item_laris SET jml = '$qty_br' ".
+				mysqli_query($koneksi, "UPDATE item_laris SET jml = '$qty_br' ".
 								"WHERE round(bln) = '$xbln1' ".
 								"AND round(thn) = '$xthn1' ".
 								"AND kd_brg = '$j_brgkd'");
 				}
 			else //nak gak ada, berarti baru
 				{
-				mysql_query("INSERT INTO item_laris(kd, bln, thn, kd_brg, jml) VALUES ".
+				mysqli_query($koneksi, "INSERT INTO item_laris(kd, bln, thn, kd_brg, jml) VALUES ".
 								"('$xxy', '$xbln1', '$xthn1', '$j_brgkd', '$j_qty')");
 				}
 			}
-		while ($rrisa = mysql_fetch_assoc($qrisa));
+		while ($rrisa = mysqli_fetch_assoc($qrisa));
 		}
 	}
 
@@ -210,16 +210,16 @@ echo "<select name=\"xthn1\" onChange=\"MM_jumpMenu('self',this,0)\">";
 echo '<option value="'.$xthn1.'" selected>'.$xthn1.'</option>';
 
 //query
-$qthn = mysql_query("SELECT * FROM m_tahun ".
+$qthn = mysqli_query($koneksi, "SELECT * FROM m_tahun ".
 						"ORDER BY tahun DESC");
-$rthn = mysql_fetch_assoc($qthn);
+$rthn = mysqli_fetch_assoc($qthn);
 
 do
 	{
 	$x_thn = nosql($rthn['tahun']);
 	echo '<option value="'.$filenya.'?xbln1='.$xbln1.'&xthn1='.$x_thn.'">'.$x_thn.'</option>';
 	}
-while ($rthn = mysql_fetch_assoc($qthn));
+while ($rthn = mysqli_fetch_assoc($qthn));
 
 echo '</select>
 </td>
@@ -252,11 +252,11 @@ else
 					"ORDER BY round(item_laris.jml) DESC";
 	$sqlresult = $sqlcount;
 
-	$count = mysql_num_rows(mysql_query($sqlcount));
+	$count = mysqli_num_rows(mysqli_query($sqlcount));
 	$pages = $p->findPages($count, $limit);
-	$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+	$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 	$pagelist = $p->pageList($_GET['page'], $pages, $target);
-	$data = mysql_fetch_array($result);
+	$data = mysqli_fetch_array($result);
 
 	//nek ada
 	if ($count != 0)
@@ -299,7 +299,7 @@ else
 			<td>'.$x_jml.'</td>
 	        </tr>';
 			}
-		while ($data = mysql_fetch_assoc($result));
+		while ($data = mysqli_fetch_assoc($result));
 
 		echo '</table>
 		<table width="800" border="0" cellspacing="0" cellpadding="3">

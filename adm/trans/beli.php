@@ -271,7 +271,7 @@ if ($_POST['btnTGLSAV'])
 
 
 	//ganti tgl. beli
-	mysql_query("UPDATE beli SET tgl_beli = '$g_tgl_br' ".
+	mysqli_query($koneksi, "UPDATE beli SET tgl_beli = '$g_tgl_br' ".
 					"WHERE kd = '$belkd'");
 
 	//null-kan
@@ -298,14 +298,14 @@ if ($_POST['btnHPS'])
 	$belkd = nosql($_POST['p_belkd']);
 
 	//hapus pembelian
-	mysql_query("DELETE FROM beli ".
+	mysqli_query($koneksi, "DELETE FROM beli ".
 					"WHERE kd = '$belkd'");
 
 	//kurangi stock dahulu
-	$qblu = mysql_query("SELECT * FROM beli_detail ".
+	$qblu = mysqli_query($koneksi, "SELECT * FROM beli_detail ".
 							"WHERE kd_beli = '$belkd' ".
 							"ORDER BY kd_brg ASC");
-	$rblu = mysql_fetch_assoc($qblu);
+	$rblu = mysqli_fetch_assoc($qblu);
 
 	do
 		{
@@ -316,16 +316,16 @@ if ($_POST['btnHPS'])
 		$brg_qty_toko = nosql($rblu['qty_toko']);
 
 		//kurangi stock
-		mysql_query("UPDATE stock SET jml_gudang = jml_gudang - '$brg_qty_gudang', ".
+		mysqli_query($koneksi, "UPDATE stock SET jml_gudang = jml_gudang - '$brg_qty_gudang', ".
 						"jml_toko = jml_toko - '$brg_qty_toko' ".
 						"WHERE kd_brg = '$brg_kd'");
 		////////////////////////////////////////////////////////////////////////////////
 		}
-	while ($rblu = mysql_fetch_assoc($qblu));
+	while ($rblu = mysqli_fetch_assoc($qblu));
 
 
 	//hapus detail
-	mysql_query("DELETE FROM beli_detail ".
+	mysqli_query($koneksi, "DELETE FROM beli_detail ".
 					"WHERE kd_beli = '$belkd'");
 
 
@@ -383,11 +383,11 @@ if ($_POST['btnSMP'])
 	if ($s == "baru")
 		{
 		//cek
-		$qcc = mysql_query("SELECT * FROM beli ".
+		$qcc = mysqli_query($koneksi, "SELECT * FROM beli ".
 								"WHERE kd_supplier = '$supkd' ".
 								"AND no_faktur = '$nofak'");
-		$rcc = mysql_fetch_assoc($qcc);
-		$tcc = mysql_num_rows($qcc);
+		$rcc = mysqli_fetch_assoc($qcc);
+		$tcc = mysqli_num_rows($qcc);
 
 		//nek ada yg sama
 		if ($tcc != 0)
@@ -407,7 +407,7 @@ if ($_POST['btnSMP'])
 		else
 			{
 			//insert
-			mysql_query("INSERT INTO beli(kd, tgl_beli, no_faktur, kd_jns_byr, kd_supplier, hr_jtempo, ".
+			mysqli_query($koneksi, "INSERT INTO beli(kd, tgl_beli, no_faktur, kd_jns_byr, kd_supplier, hr_jtempo, ".
 							"tgl_lunas, diskon, total_beli, ".
 							"total_diskon, ppn, total_bayar, postdate) VALUES ".
 							"('$belkd', '$tgl', '$nofak', '$jbyr', '$supkd', '$hr_jtempo', ".
@@ -432,7 +432,7 @@ if ($_POST['btnSMP'])
 	if ((empty($s)) OR ($s == "edit"))
 		{
 		//query update
-		mysql_query("UPDATE beli SET no_faktur = '$nofak', ".
+		mysqli_query($koneksi, "UPDATE beli SET no_faktur = '$nofak', ".
 						"kd_jns_byr = '$jbyr', ".
 						"hr_jtempo = '$hr_jtempo', ".
 						"tgl_lunas = '$ltgl', ".
@@ -498,10 +498,10 @@ if ($_POST['btnSMP2'])
 				"&belkd=$belkd&yuk=detail";
 
 	//barangnya
-	$qbrg = mysql_query("SELECT * FROM m_brg ".
+	$qbrg = mysqli_query($koneksi, "SELECT * FROM m_brg ".
 							"WHERE kode = '$y_kode'");
-	$rbrg = mysql_fetch_assoc($qbrg);
-	$tbrg = mysql_num_rows($qbrg);
+	$rbrg = mysqli_fetch_assoc($qbrg);
+	$tbrg = mysqli_num_rows($qbrg);
 	$brg_kd = nosql($rbrg['kd']);
 	$y_nama = balikin($rbrg['nama']);
 
@@ -528,10 +528,10 @@ if ($_POST['btnSMP2'])
 		if ($tbrg != 0)
 			{
 			//ketahui harga beli
-			$qstk = mysql_query("SELECT * FROM stock ".
+			$qstk = mysqli_query($koneksi, "SELECT * FROM stock ".
 									"WHERE kd_brg = '$brg_kd'");
-			$rstk = mysql_fetch_assoc($qstk);
-			$tstk = mysql_num_rows($qstk);
+			$rstk = mysqli_fetch_assoc($qstk);
+			$tstk = mysqli_num_rows($qstk);
 			$y_hrg_lama = nosql($rstk['hrg_beli']);
 
 
@@ -572,13 +572,13 @@ if ($_POST['btnSMP2'])
 		else
 			{
 			//tambahkan ke stock dan ubah harga beli
-			mysql_query("UPDATE stock SET jml_gudang = jml_gudang + '$y_qty_gudang', ".
+			mysqli_query($koneksi, "UPDATE stock SET jml_gudang = jml_gudang + '$y_qty_gudang', ".
 							"jml_toko = jml_toko + '$y_qty_toko', ".
 							"hrg_beli = '$y_hrg_stl' ".
 							"WHERE kd_brg = '$brg_kd'");
 
 			//simpan
-			mysql_query("INSERT INTO beli_detail(kd, kd_beli, kd_brg, hrg, qty, qty_gudang, qty_toko, ".
+			mysqli_query($koneksi, "INSERT INTO beli_detail(kd, kd_beli, kd_brg, hrg, qty, qty_gudang, qty_toko, ".
 							"diskon, diskon2, subtotal) VALUES ".
 							"('$x', '$belkd', '$brg_kd', '$y_hrg', '$y_qty', '$y_qty_gudang', '$y_qty_toko', ".
 							"'$y_diskon', '$y_diskon2', '$y_subtotal')");
@@ -607,12 +607,12 @@ if ($_POST['btnHPS2'])
 
 
 	//data
-	$qdata = mysql_query("SELECT beli_detail.*, beli_detail.kd AS bdkd, m_brg.* ".
+	$qdata = mysqli_query($koneksi, "SELECT beli_detail.*, beli_detail.kd AS bdkd, m_brg.* ".
 							"FROM beli_detail, m_brg ".
 							"WHERE beli_detail.kd_brg = m_brg.kd ".
 							"AND beli_detail.kd_beli = '$belkd' ".
 							"ORDER BY m_brg.kode ASC");
-	$rdata = mysql_fetch_assoc($qdata);
+	$rdata = mysqli_fetch_assoc($qdata);
 
 	do
 		{
@@ -623,27 +623,27 @@ if ($_POST['btnHPS2'])
 		$kd = nosql($_POST["$yuhu"]);
 
 		//netralkan dahulu /////////////////////////////////////////////////////////////
-		$qcc = mysql_query("SELECT * FROM beli_detail ".
+		$qcc = mysqli_query($koneksi, "SELECT * FROM beli_detail ".
 								"WHERE kd = '$kd'");
-		$rcc = mysql_fetch_assoc($qcc);
-		$tcc = mysql_num_rows($qcc);
+		$rcc = mysqli_fetch_assoc($qcc);
+		$tcc = mysqli_num_rows($qcc);
 		$cc_brg_kd = nosql($rcc['kd_brg']);
 		$cc_qty_gudang = nosql($rcc['qty_gudang']);
 		$cc_qty_toko = nosql($rcc['qty_toko']);
 
 		//kurangi stock
-		mysql_query("UPDATE stock SET jml_gudang = jml_gudang - '$cc_qty_gudang', ".
+		mysqli_query($koneksi, "UPDATE stock SET jml_gudang = jml_gudang - '$cc_qty_gudang', ".
 						"jml_toko = jml_toko - '$cc_qty_toko' ".
 						"WHERE kd_brg = '$cc_brg_kd'");
 		////////////////////////////////////////////////////////////////////////////////
 
 
 		//del /////////////////////////////////////////////////////////////////////////
-		mysql_query("DELETE FROM beli_detail ".
+		mysqli_query($koneksi, "DELETE FROM beli_detail ".
 						"WHERE kd = '$kd'");
 		///////////////////////////////////////////////////////////////////////////////
 		}
-	while ($rdata = mysql_fetch_assoc($qdata));
+	while ($rdata = mysqli_fetch_assoc($qdata));
 
 
 	//null-kan
@@ -676,13 +676,13 @@ if ($_POST['btnSMP3'])
 
 
 	//detail item / barang
-	$qdata = mysql_query("SELECT beli_detail.*, beli_detail.kd AS bdkd, ".
+	$qdata = mysqli_query($koneksi, "SELECT beli_detail.*, beli_detail.kd AS bdkd, ".
 							"m_brg.* ".
 							"FROM beli_detail, m_brg ".
 							"WHERE beli_detail.kd_brg = m_brg.kd ".
 							"AND beli_detail.kd_beli = '$belkd' ".
 							"ORDER BY m_brg.kode ASC");
-	$rdata = mysql_fetch_assoc($qdata);
+	$rdata = mysqli_fetch_assoc($qdata);
 
 
 	do
@@ -751,10 +751,10 @@ if ($_POST['btnSMP3'])
 
 
 		//sesuaikan ////////////////////////////////////////////////////////////////////
-		$qcc = mysql_query("SELECT * FROM beli_detail ".
+		$qcc = mysqli_query($koneksi, "SELECT * FROM beli_detail ".
 								"WHERE kd = '$xkdx'");
-		$rcc = mysql_fetch_assoc($qcc);
-		$tcc = mysql_num_rows($qcc);
+		$rcc = mysqli_fetch_assoc($qcc);
+		$tcc = mysqli_num_rows($qcc);
 		$cc_brg_kd = nosql($rcc['kd_brg']);
 		$cc_qty_gudang = nosql($rcc['qty_gudang']);
 		$cc_qty_toko = nosql($rcc['qty_toko']);
@@ -769,7 +769,7 @@ if ($_POST['btnSMP3'])
 			if ($zbonus == "true")
 				{
 				//update
-				mysql_query("UPDATE beli_detail SET hrg = '$xchrgx', ".
+				mysqli_query($koneksi, "UPDATE beli_detail SET hrg = '$xchrgx', ".
 								"diskon = '$xcdiskonx', ".
 								"diskon2 = '$xcdiskonyx', ".
 								"subtotal = '$xcsubtotalx', ".
@@ -782,7 +782,7 @@ if ($_POST['btnSMP3'])
 			else //bukan bonus
 				{
 				//update
-				mysql_query("UPDATE beli_detail SET hrg = '$xhrgx', ".
+				mysqli_query($koneksi, "UPDATE beli_detail SET hrg = '$xhrgx', ".
 								"diskon = '$xdiskonx', ".
 								"diskon2 = '$xdiskonyx', ".
 								"subtotal = '$xsubtotalx', ".
@@ -790,7 +790,7 @@ if ($_POST['btnSMP3'])
 								"WHERE kd = '$xkdx'");
 
 				//update stock
-				mysql_query("UPDATE stock SET hrg_beli = '$xhrg_stlyx' ".
+				mysqli_query($koneksi, "UPDATE stock SET hrg_beli = '$xhrg_stlyx' ".
 							"WHERE kd_brg = '$cc_brg_kd'");
 				}
 			}
@@ -807,7 +807,7 @@ if ($_POST['btnSMP3'])
 				if ($zbonus == "true")
 					{
 					//update
-					mysql_query("UPDATE beli_detail SET qty = '$xqtyx', ".
+					mysqli_query($koneksi, "UPDATE beli_detail SET qty = '$xqtyx', ".
 									"qty_gudang = '$nt_qty_gudang', ".
 									"qty_toko = '$xqtyx', ".
 									"hrg = '$xchrgx', ".
@@ -823,7 +823,7 @@ if ($_POST['btnSMP3'])
 				else
 					{
 					//update
-					mysql_query("UPDATE beli_detail SET qty = '$xqtyx', ".
+					mysqli_query($koneksi, "UPDATE beli_detail SET qty = '$xqtyx', ".
 									"qty_gudang = '$nt_qty_gudang', ".
 									"qty_toko = '$xqtyx', ".
 									"hrg = '$xhrgx', ".
@@ -835,13 +835,13 @@ if ($_POST['btnSMP3'])
 
 
 					//kurangi stock //netralkan
-					mysql_query("UPDATE stock SET jml_toko = jml_toko - '$cc_qty_toko', ".
+					mysqli_query($koneksi, "UPDATE stock SET jml_toko = jml_toko - '$cc_qty_toko', ".
 									"jml_gudang = jml_gudang - $cc_qty_gudang ".
 									"WHERE kd_brg = '$cc_brg_kd'");
 
 
 					//update stock dan harga beli
-					mysql_query("UPDATE stock SET jml_toko = jml_toko + '$xqtyx', ".
+					mysqli_query($koneksi, "UPDATE stock SET jml_toko = jml_toko + '$xqtyx', ".
 									"hrg_beli = '$xhrg_stlyx' ".
 									"WHERE kd_brg = '$cc_brg_kd'");
 					}
@@ -852,7 +852,7 @@ if ($_POST['btnSMP3'])
 				if ($zbonus == "true")
 					{
 					//update
-					mysql_query("UPDATE beli_detail SET qty = '$xqtyx', ".
+					mysqli_query($koneksi, "UPDATE beli_detail SET qty = '$xqtyx', ".
 									"qty_toko = '$xqtyx', ".
 									"hrg = '$xchrgx', ".
 									"diskon = '$xcdiskonx', ".
@@ -867,7 +867,7 @@ if ($_POST['btnSMP3'])
 				else
 					{
 					//update
-					mysql_query("UPDATE beli_detail SET qty = '$xqtyx', ".
+					mysqli_query($koneksi, "UPDATE beli_detail SET qty = '$xqtyx', ".
 									"qty_toko = '$xqtyx', ".
 									"hrg = '$xhrgx', ".
 									"diskon = '$xdiskonx', ".
@@ -877,12 +877,12 @@ if ($_POST['btnSMP3'])
 									"WHERE kd = '$xkdx'");
 
 					//kurangi stock //netralkan
-					mysql_query("UPDATE stock SET jml_toko = jml_toko - '$cc_qty_toko' ".
+					mysqli_query($koneksi, "UPDATE stock SET jml_toko = jml_toko - '$cc_qty_toko' ".
 									"WHERE kd_brg = '$cc_brg_kd'");
 
 
 					//update stock dan harga beli
-					mysql_query("UPDATE stock SET jml_toko = jml_toko + '$xqtyx', ".
+					mysqli_query($koneksi, "UPDATE stock SET jml_toko = jml_toko + '$xqtyx', ".
 									"hrg_beli = '$xhrg_stlyx' ".
 									"WHERE kd_brg = '$cc_brg_kd'");
 					}
@@ -890,7 +890,7 @@ if ($_POST['btnSMP3'])
 			}
 		////////////////////////////////////////////////////////////////////////////////
 		}
-	while ($rdata = mysql_fetch_assoc($qdata));
+	while ($rdata = mysqli_fetch_assoc($qdata));
 
 
 	//null-kan
@@ -1014,9 +1014,9 @@ echo '</td>
 echo "<select name=\"supplier\" onChange=\"MM_jumpMenu('self',this,0)\">";
 
 //terpilih
-$qsupx = mysql_query("SELECT * FROM m_supplier ".
+$qsupx = mysqli_query($koneksi, "SELECT * FROM m_supplier ".
 						"WHERE kd = '$supkd'");
-$rsupx = mysql_fetch_assoc($qsupx);
+$rsupx = mysqli_fetch_assoc($qsupx);
 $supx_kd = nosql($rsupx['kd']);
 $supx_nm = balikin($rsupx['singkatan']);
 
@@ -1024,10 +1024,10 @@ $supx_nm = balikin($rsupx['singkatan']);
 echo '<option value="'.$supx_kd.'" selected>'.$supx_nm.'</option>';
 
 //query
-$qsup = mysql_query("SELECT * FROM m_supplier ".
+$qsup = mysqli_query($koneksi, "SELECT * FROM m_supplier ".
 						"WHERE kd <> '$supkd' ".
 						"ORDER BY singkatan ASC");
-$rsup = mysql_fetch_assoc($qsup);
+$rsup = mysqli_fetch_assoc($qsup);
 
 do
 	{
@@ -1036,7 +1036,7 @@ do
 
 	echo '<option value="'.$filenya.'?supkd='.$sup_kd.'">'.$sup_sing.'</option>';
 	}
-while ($rsup = mysql_fetch_assoc($qsup));
+while ($rsup = mysqli_fetch_assoc($qsup));
 
 echo '</select>,
 
@@ -1065,50 +1065,50 @@ echo "<select name=\"xthn1\" onChange=\"MM_jumpMenu('self',this,0)\">";
 echo '<option value="'.$xthn1.'" selected>'.$xthn1.'</option>';
 
 //query
-$qthn = mysql_query("SELECT * FROM m_tahun ".
+$qthn = mysqli_query($koneksi, "SELECT * FROM m_tahun ".
 						"ORDER BY tahun DESC");
-$rthn = mysql_fetch_assoc($qthn);
+$rthn = mysqli_fetch_assoc($qthn);
 
 do
 	{
 	$x_thn = nosql($rthn['tahun']);
 	echo '<option value="'.$filenya.'?supkd='.$supkd.'&xtgl1='.$xtgl1.'&xbln1='.$xbln1.'&xthn1='.$x_thn.'">'.$x_thn.'</option>';
 	}
-while ($rthn = mysql_fetch_assoc($qthn));
+while ($rthn = mysqli_fetch_assoc($qthn));
 
 echo '</select>,
 <strong>No. Faktur : </strong>';
 echo "<select name=\"fak\" onChange=\"MM_jumpMenu('self',this,0)\">";
 
 //terpilih
-$qtru = mysql_query("SELECT * FROM beli ".
+$qtru = mysqli_query($koneksi, "SELECT * FROM beli ".
 						"WHERE round(DATE_FORMAT(tgl_beli, '%d')) = '$xtgl1' ".
 						"AND round(DATE_FORMAT(tgl_beli, '%m')) = '$xbln1' ".
 						"AND round(DATE_FORMAT(tgl_beli, '%Y')) = '$xthn1' ".
 						"AND kd = '$belkd'");
-$rtru = mysql_fetch_assoc($qtru);
+$rtru = mysqli_fetch_assoc($qtru);
 $x_belkd = $belkd;
 $x_nofak = balikin($rtru['no_faktur']);
 
 
 //terpilih --> total item
-$qtru2 = mysql_query("SELECT * FROM beli_detail ".
+$qtru2 = mysqli_query($koneksi, "SELECT * FROM beli_detail ".
 						"WHERE kd_beli = '$belkd'");
-$rtru2 = mysql_fetch_assoc($qtru2);
-$ttru2 = mysql_num_rows($qtru2);
+$rtru2 = mysqli_fetch_assoc($qtru2);
+$ttru2 = mysqli_num_rows($qtru2);
 $x_beli_items = nosql($ttru2);
 
 echo '<option value="'.$x_belkd.'" selected>'.$x_nofak.' => ['.$x_beli_items.' Item].</option>';
 
 //data
-$qtrux = mysql_query("SELECT * FROM beli ".
+$qtrux = mysqli_query($koneksi, "SELECT * FROM beli ".
 						"WHERE round(DATE_FORMAT(tgl_beli, '%d')) = '$xtgl1' ".
 						"AND round(DATE_FORMAT(tgl_beli, '%m')) = '$xbln1' ".
 						"AND round(DATE_FORMAT(tgl_beli, '%Y')) = '$xthn1' ".
 						"AND kd <> '$belkd' ".
 						"AND kd_supplier = '$supkd' ".
 						"ORDER BY round(no_faktur) ASC");
-$rtrux = mysql_fetch_assoc($qtrux);
+$rtrux = mysqli_fetch_assoc($qtrux);
 
 do
 	{
@@ -1117,10 +1117,10 @@ do
 
 
 	//jumlahnya
-	$qyukx = mysql_query("SELECT * FROM beli_detail ".
+	$qyukx = mysqli_query($koneksi, "SELECT * FROM beli_detail ".
 							"WHERE kd_beli = '$i_belkd'");
-	$ryukx = mysql_fetch_assoc($qyukx);
-	$tyukx = mysql_num_rows($qyukx);
+	$ryukx = mysqli_fetch_assoc($qyukx);
+	$tyukx = mysqli_num_rows($qyukx);
 	$i_beli_items = $tyukx;
 
 	echo '<option value="'.$filenya.'?supkd='.$supkd.''.
@@ -1128,7 +1128,7 @@ do
 	'&belkd='.$i_belkd.'">
 	'.$i_nofak.' => ['.$i_beli_items.' Item]. </option>';
 	}
-while ($rtrux = mysql_fetch_assoc($qtrux));
+while ($rtrux = mysqli_fetch_assoc($qtrux));
 
 echo '</select>
 <input name="btnTGL" type="submit" value="[Ganti Tgl.]" '.$tgldit_attr.'>
@@ -1165,16 +1165,16 @@ if ($yuk=="tgldit")
 	<option value="" selected></option>';
 
 	//query
-	$qthn3 = mysql_query("SELECT * FROM m_tahun ".
+	$qthn3 = mysqli_query($koneksi, "SELECT * FROM m_tahun ".
 							"ORDER BY tahun DESC");
-	$rthn3 = mysql_fetch_assoc($qthn3);
+	$rthn3 = mysqli_fetch_assoc($qthn3);
 
 	do
 		{
 		$x_thn3 = nosql($rthn3['tahun']);
 		echo '<option value="'.$x_thn3.'">'.$x_thn3.'</option>';
 		}
-	while ($rthn3 = mysql_fetch_assoc($qthn3));
+	while ($rthn3 = mysqli_fetch_assoc($qthn3));
 
 	echo '</select>
 	<input name="btnTGLBTL" type="submit" value="BATAL">
@@ -1210,7 +1210,7 @@ else if (empty($belkd))
 else
 	{
 	//query view
-	$qteh = mysql_query("SELECT beli.*, DATE_FORMAT(beli.tgl_jtempo, '%d') AS ttgl, ".
+	$qteh = mysqli_query($koneksi, "SELECT beli.*, DATE_FORMAT(beli.tgl_jtempo, '%d') AS ttgl, ".
 							"DATE_FORMAT(beli.tgl_jtempo, '%m') AS tbln, ".
 							"DATE_FORMAT(beli.tgl_jtempo, '%Y') AS tthn, ".
 							"DATE_FORMAT(beli.tgl_lunas, '%d') AS ltgl, ".
@@ -1218,15 +1218,15 @@ else
 							"DATE_FORMAT(beli.tgl_lunas, '%Y') AS lthn ".
 							"FROM beli ".
 							"WHERE beli.kd = '$belkd'");
-	$rteh = mysql_fetch_assoc($qteh);
+	$rteh = mysqli_fetch_assoc($qteh);
 	$e_nofak = balikin($rteh['no_faktur']);
 
 	//jenis pembayaran
 	$e_jns_byr_kd = nosql($rteh['kd_jns_byr']);
 
-	$qjbr = mysql_query("SELECT * FROM m_jns_byr ".
+	$qjbr = mysqli_query($koneksi, "SELECT * FROM m_jns_byr ".
 							"WHERE kd = '$e_jns_byr_kd'");
-	$rjbr = mysql_fetch_assoc($qjbr);
+	$rjbr = mysqli_fetch_assoc($qjbr);
 	$jbr_nm = balikin($rjbr['jns_byr']);
 	$e_jns_byr_nm = $jbr_nm;
 
@@ -1243,11 +1243,11 @@ else
 	$e_ppn = nosql($rteh['ppn']);
 
 	//total sementara
-	$qduwi = mysql_query("SELECT SUM(subtotal) AS subtotal ".
+	$qduwi = mysqli_query($koneksi, "SELECT SUM(subtotal) AS subtotal ".
 							"FROM beli_detail ".
 							"WHERE kd_beli = '$belkd' ".
 							"AND bonus = 'false'");
-	$rduwi = mysql_fetch_assoc($qduwi);
+	$rduwi = mysqli_fetch_assoc($qduwi);
 	$e_total_beli = nosql($rduwi['subtotal']);
 	$e_total_diskon = round((($e_diskon * $e_total_beli)/100),2);
 	$e_total_bayar = round(nosql($rteh['total_bayar']),2);
@@ -1294,10 +1294,10 @@ else
 	<option value="'.$e_jns_byr_kd.'" selected>'.$e_jns_byr_nm.'</option>';
 
 	//query
-	$qjei = mysql_query("SELECT * FROM m_jns_byr ".
+	$qjei = mysqli_query($koneksi, "SELECT * FROM m_jns_byr ".
 							"WHERE kd <> '$e_jns_byr_kd' ".
 							"ORDER BY jns_byr ASC");
-	$rjei = mysql_fetch_assoc($qjei);
+	$rjei = mysqli_fetch_assoc($qjei);
 
 	do
 		{
@@ -1306,7 +1306,7 @@ else
 
 		echo '<option value="'.$jei_kd.'">'.$jei_nm.'</option>';
 		}
-	while ($rjei = mysql_fetch_assoc($qjei));
+	while ($rjei = mysqli_fetch_assoc($qjei));
 
 	echo '</select>
 	<br>
@@ -1337,16 +1337,16 @@ else
 	<option value="'.$e_lthn.'" selected>'.$e_lthn.'</option>';
 
 	//query
-	$qthn3 = mysql_query("SELECT * FROM m_tahun ".
+	$qthn3 = mysqli_query($koneksi, "SELECT * FROM m_tahun ".
 							"ORDER BY tahun DESC");
-	$rthn3 = mysql_fetch_assoc($qthn3);
+	$rthn3 = mysqli_fetch_assoc($qthn3);
 
 	do
 		{
 		$x_thn3 = nosql($rthn3['tahun']);
 		echo '<option value="'.$x_thn3.'">'.$x_thn3.'</option>';
 		}
-	while ($rthn3 = mysql_fetch_assoc($qthn3));
+	while ($rthn3 = mysqli_fetch_assoc($qthn3));
 
 	echo '</select>
 	<br>
@@ -1503,14 +1503,14 @@ else
 
 
 		//detail item / barang
-		$qdata = mysql_query("SELECT beli_detail.*, beli_detail.kd AS bdkd, ".
+		$qdata = mysqli_query($koneksi, "SELECT beli_detail.*, beli_detail.kd AS bdkd, ".
 								"m_brg.* ".
 								"FROM beli_detail, m_brg ".
 								"WHERE beli_detail.kd_brg = m_brg.kd ".
 								"AND beli_detail.kd_beli = '$belkd' ".
 								"ORDER BY beli_detail.bonus DESC, m_brg.kode ASC");
-		$rdata = mysql_fetch_assoc($qdata);
-		$rcount = mysql_num_rows($qdata);
+		$rdata = mysqli_fetch_assoc($qdata);
+		$rcount = mysqli_num_rows($qdata);
 
 		echo '<table width="100%" border="1" cellspacing="0" cellpadding="3">
 		<tr bgcolor="'.$warnaheader.'">
@@ -1568,14 +1568,14 @@ else
 
 
 				//satuan
-				$q_stu = mysql_query("SELECT * FROM m_satuan ".
+				$q_stu = mysqli_query($koneksi, "SELECT * FROM m_satuan ".
 										"WHERE kd = '$d_satuan_kd'");
-				$r_stu = mysql_fetch_assoc($q_stu);
+				$r_stu = mysqli_fetch_assoc($q_stu);
 
 				//merk
-				$q_me = mysql_query("SELECT * FROM m_merk ".
+				$q_me = mysqli_query($koneksi, "SELECT * FROM m_merk ".
 										"WHERE kd = '$d_merk_kd'");
-				$r_me = mysql_fetch_assoc($q_me);
+				$r_me = mysqli_fetch_assoc($q_me);
 
 				//sub nilai
 				$d_satuan = balikin($r_stu['satuan']);
@@ -1807,7 +1807,7 @@ else
 				</td>
 				</tr>';
 				}
-			while ($rdata = mysql_fetch_assoc($qdata));
+			while ($rdata = mysqli_fetch_assoc($qdata));
 			}
 
 		echo '</table>

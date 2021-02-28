@@ -44,7 +44,7 @@ $diload = "window.print();location.href='$ke';";
 ob_start();
 
 //query
-$qdata = mysql_query("SELECT DISTINCT(kd_brg) ".
+$qdata = mysqli_query($koneksi, "SELECT DISTINCT(kd_brg) ".
 						"FROM jual, jual_detail, m_brg ".
 						"WHERE jual_detail.kd_jual = jual.kd ".
 						"AND jual_detail.kd_brg = m_brg.kd ".
@@ -52,8 +52,8 @@ $qdata = mysql_query("SELECT DISTINCT(kd_brg) ".
 						"AND round(DATE_FORMAT(jual.tgl_jual, '%m')) = '$xbln1' ".
 						"AND round(DATE_FORMAT(jual.tgl_jual, '%Y')) = '$xthn1' ".
 						"ORDER BY m_brg.nama ASC");
-$rdata = mysql_fetch_assoc($qdata);
-$tdata = mysql_num_rows($qdata);
+$rdata = mysqli_fetch_assoc($qdata);
+$tdata = mysqli_num_rows($qdata);
 
 
 //view //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,25 +99,25 @@ if ($tdata != 0)
 		$brgkd = nosql($rdata['kd_brg']);
 
 		//artinya....
-		$qbrg = mysql_query("SELECT m_brg.*, m_satuan.* ".
+		$qbrg = mysqli_query($koneksi, "SELECT m_brg.*, m_satuan.* ".
 								"FROM m_brg, m_satuan ".
 								"WHERE m_brg.kd_satuan = m_satuan.kd ".
 								"AND m_brg.kd = '$brgkd'");
-		$rbrg = mysql_fetch_assoc($qbrg);
-		$tbrg = mysql_num_rows($qbrg);
+		$rbrg = mysqli_fetch_assoc($qbrg);
+		$tbrg = mysqli_num_rows($qbrg);
 		$brg_kode = balikin($rbrg['kode']);
 		$brg_nama = balikin($rbrg['nama']);
 		$brg_satuan = balikin($rbrg['satuan']);
 
 		//jumlahnya
-		$qjml = mysql_query("SELECT SUM(qty) AS jml ".
+		$qjml = mysqli_query($koneksi, "SELECT SUM(qty) AS jml ".
 								"FROM jual, jual_detail ".
 								"WHERE jual_detail.kd_jual = jual.kd ".
 								"AND round(DATE_FORMAT(jual.tgl_jual, '%d')) = '$xtgl1' ".
 								"AND round(DATE_FORMAT(jual.tgl_jual, '%m')) = '$xbln1' ".
 								"AND round(DATE_FORMAT(jual.tgl_jual, '%Y')) = '$xthn1' ".
 								"AND jual_detail.kd_brg = '$brgkd'");
-		$rjml = mysql_fetch_assoc($qjml);
+		$rjml = mysqli_fetch_assoc($qjml);
 		$jml_qty = nosql($rjml['jml']);
 
 		echo "<tr bgcolor=\"$warna\">";
@@ -128,7 +128,7 @@ if ($tdata != 0)
 		</td>
         </tr>';
 		}
-	while ($rdata = mysql_fetch_assoc($qdata));
+	while ($rdata = mysqli_fetch_assoc($qdata));
 	}
 echo '</table>';
 

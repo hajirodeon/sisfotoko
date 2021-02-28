@@ -48,7 +48,7 @@ $diload = "window.print();location.href='$ke';";
 ob_start();
 
 //query
-$qdata = mysql_query("SELECT jual.*, jual_detail.*, ".
+$qdata = mysqli_query($koneksi, "SELECT jual.*, jual_detail.*, ".
 						"jual_detail.kd AS ndkd, ".
 						"jual_detail.qty AS ndqty, ".
 						"m_brg.*, m_satuan.*, stock.* ".
@@ -59,8 +59,8 @@ $qdata = mysql_query("SELECT jual.*, jual_detail.*, ".
 						"AND stock.kd_brg = m_brg.kd ".
 						"AND jual.kd = '$jukd' ".
 						"ORDER BY m_brg.kode ASC");
-$rdata = mysql_fetch_assoc($qdata);
-$tdata = mysql_num_rows($qdata);
+$rdata = mysqli_fetch_assoc($qdata);
+$tdata = mysqli_num_rows($qdata);
 
 
 
@@ -80,14 +80,14 @@ echo 'Tanggal : <strong>'.$xtgl1.' '.$arrbln[$xbln1].' '.$xthn1.'</strong>,
 <br>
 No. Faktur : ';
 //terpilih
-$qtru = mysql_query("SELECT jual.*, jual.kd AS jukd, m_kastumer.*  ".
+$qtru = mysqli_query($koneksi, "SELECT jual.*, jual.kd AS jukd, m_kastumer.*  ".
 						"FROM jual, m_kastumer ".
 						"WHERE jual.kd_kastumer = m_kastumer.kd ".
 						"AND round(DATE_FORMAT(jual.tgl_jual, '%d')) = '$xtgl1' ".
 						"AND round(DATE_FORMAT(jual.tgl_jual, '%m')) = '$xbln1' ".
 						"AND round(DATE_FORMAT(jual.tgl_jual, '%Y')) = '$xthn1' ".
 						"AND jual.kd = '$jukd'");
-$rtru = mysql_fetch_assoc($qtru);
+$rtru = mysqli_fetch_assoc($qtru);
 $x_jukd = $jukd;
 $x_no_faktur = balikin($rtru['no_faktur']);
 $x_pelanggan = balikin($rtru['singkatan']);
@@ -166,7 +166,7 @@ if ($tdata != 0)
 		</td>
         </tr>';
 		}
-	while ($rdata = mysql_fetch_assoc($qdata));
+	while ($rdata = mysqli_fetch_assoc($qdata));
 	}
 	echo '</table>';
 

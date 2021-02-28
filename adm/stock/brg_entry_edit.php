@@ -85,13 +85,13 @@ if ($s == "edit")
 	{
 	$brgkd = nosql($_REQUEST['brgkd']);
 
-	$qx = mysql_query("SELECT m_brg.*, m_brg.kode AS mbkod, ".
+	$qx = mysqli_query($koneksi, "SELECT m_brg.*, m_brg.kode AS mbkod, ".
 						"m_brg.barkode AS mbbar, ".
 						"m_brg.nama AS mbnm, stock.* ".
 						"FROM m_brg, stock ".
 						"WHERE stock.kd_brg = m_brg.kd ".
 						"AND m_brg.kd = '$brgkd'");
-	$rowx = mysql_fetch_assoc($qx);
+	$rowx = mysqli_fetch_assoc($qx);
 
 	$merkkd = nosql($rowx['kd_merk']);
 	$katkd = nosql($rowx['kd_kategori']);
@@ -166,16 +166,16 @@ if ($_POST['btnSMP'])
 		else
 			{
 			///cek kode
-			$qcc = mysql_query("SELECT * FROM m_brg ".
+			$qcc = mysqli_query($koneksi, "SELECT * FROM m_brg ".
 									"WHERE kode = '$kode'");
-			$rcc = mysql_fetch_assoc($qcc);
-			$tcc = mysql_num_rows($qcc);
+			$rcc = mysqli_fetch_assoc($qcc);
+			$tcc = mysqli_num_rows($qcc);
 
 			///cek barcode
-			$qcc1 = mysql_query("SELECT * FROM m_brg ".
+			$qcc1 = mysqli_query($koneksi, "SELECT * FROM m_brg ".
 									"WHERE barkode = '$barkode'");
-			$rcc1 = mysql_fetch_assoc($qcc1);
-			$tcc1 = mysql_num_rows($qcc1);
+			$rcc1 = mysqli_fetch_assoc($qcc1);
+			$tcc1 = mysqli_num_rows($qcc1);
 			$cc1_barkode = nosql($rcc1['barkode']);
 
 			//nek duplikasi, lebih dari 1
@@ -206,7 +206,7 @@ if ($_POST['btnSMP'])
 			else
 				{
 				//update m_brg
-				mysql_query("UPDATE m_brg SET kd_merk = '$merkkd', ".
+				mysqli_query($koneksi, "UPDATE m_brg SET kd_merk = '$merkkd', ".
 								"kd_kategori = '$katkd', ".
 								"kd_satuan = '$stkd', ".
 								"kode = '$kode', ".
@@ -215,7 +215,7 @@ if ($_POST['btnSMP'])
 								"WHERE kd = '$brgkd'");
 
 				//update stock
-				mysql_query("UPDATE stock SET jml_gudang = '$jml_gudang', ".
+				mysqli_query($koneksi, "UPDATE stock SET jml_gudang = '$jml_gudang', ".
 								"jml_toko = '$jml_toko', ".
 								"jml_min = '$jml_min', ".
 								"hrg_beli = '$hrg_beli', ".
@@ -258,16 +258,16 @@ if ($_POST['btnSMP'])
 		else
 			{
 			///cek kode
-			$qcc = mysql_query("SELECT * FROM m_brg ".
+			$qcc = mysqli_query($koneksi, "SELECT * FROM m_brg ".
 									"WHERE kode = '$kode'");
-			$rcc = mysql_fetch_assoc($qcc);
-			$tcc = mysql_num_rows($qcc);
+			$rcc = mysqli_fetch_assoc($qcc);
+			$tcc = mysqli_num_rows($qcc);
 
 			///cek barcode
-			$qcc1 = mysql_query("SELECT * FROM m_brg ".
+			$qcc1 = mysqli_query($koneksi, "SELECT * FROM m_brg ".
 									"WHERE barkode = '$barkode'");
-			$rcc1 = mysql_fetch_assoc($qcc1);
-			$tcc1 = mysql_num_rows($qcc1);
+			$rcc1 = mysqli_fetch_assoc($qcc1);
+			$tcc1 = mysqli_num_rows($qcc1);
 			$cc1_barkode = nosql($rcc1['barkode']);
 
 			//nek ada
@@ -316,13 +316,13 @@ if ($_POST['btnSMP'])
 				else
 					{
 					//ke m_brg
-					mysql_query("INSERT INTO m_brg(kd, kd_merk, kd_kategori, kd_satuan, kode, barkode, nama, postdate) VALUES ".
+					mysqli_query($koneksi, "INSERT INTO m_brg(kd, kd_merk, kd_kategori, kd_satuan, kode, barkode, nama, postdate) VALUES ".
 									"('$x', '$merkkd', '$katkd', '$stkd', '$kode', '$barkode', '$nama', '$today')");
 
 					//ke stock
 					$xi = md5($today3);
 
-					mysql_query("INSERT aINTO stock(kd, kd_brg, jml_toko, jml_gudang, jml_min, hrg_beli, hrg_jual, persen) VALUES ".
+					mysqli_query($koneksi, "INSERT aINTO stock(kd, kd_brg, jml_toko, jml_gudang, jml_min, hrg_beli, hrg_jual, persen) VALUES ".
 									"('$xi', '$x', '$jml_toko', '$jml_gudang', '$jml_min', '$hrg_beli', '$hrg_jual', '$prs_tung')");
 
 					//null-kan
@@ -387,9 +387,9 @@ if (empty($katkd))
 	}
 else
 	{
-	$qke = mysql_query("SELECT * FROM m_kategori ".
+	$qke = mysqli_query($koneksi, "SELECT * FROM m_kategori ".
 							"WHERE kd = '$katkd'");
-	$rke = mysql_fetch_assoc($qke);
+	$rke = mysqli_fetch_assoc($qke);
 	$kategori = balikin($rke['kategori']);
 
 	echo '<option value="'.$katkd.'" selected>'.$kategori.'</option>';
@@ -397,10 +397,10 @@ else
 
 
 //kategori
-$qkat = mysql_query("SELECT * FROM m_kategori ".
+$qkat = mysqli_query($koneksi, "SELECT * FROM m_kategori ".
 						"WHERE kd <> '$katkd' ".
 						"ORDER BY kategori ASC");
-$rkat = mysql_fetch_assoc($qkat);
+$rkat = mysqli_fetch_assoc($qkat);
 
 do
 	{
@@ -409,7 +409,7 @@ do
 
 	echo '<option value="'.$katkdx.'">'.$kat.'</option>';
 	}
-while ($rkat = mysql_fetch_assoc($qkat));
+while ($rkat = mysqli_fetch_assoc($qkat));
 
 echo '</select><br>
 Merk :
@@ -422,19 +422,19 @@ if (empty($merkkd))
 	}
 else
 	{
-	$qmex = mysql_query("SELECT * FROM m_merk ".
+	$qmex = mysqli_query($koneksi, "SELECT * FROM m_merk ".
 							"WHERE kd = '$merkkd'");
-	$rmex = mysql_fetch_assoc($qmex);
+	$rmex = mysqli_fetch_assoc($qmex);
 	$mex = balikin($rmex['merk']);
 
 	echo '<option value="'.$merkkd.'" selected>'.$mex.'</option>';
 	}
 
 //merk
-$qme = mysql_query("SELECT * FROM m_merk ".
+$qme = mysqli_query($koneksi, "SELECT * FROM m_merk ".
 						"WHERE kd <> '$merkkd' ".
 						"ORDER BY merk ASC");
-$rme = mysql_fetch_assoc($qme);
+$rme = mysqli_fetch_assoc($qme);
 
 do
 	{
@@ -443,7 +443,7 @@ do
 
 	echo '<option value="'.$merkkd.'">'.$me.'</option>';
 	}
-while ($rme = mysql_fetch_assoc($qme));
+while ($rme = mysqli_fetch_assoc($qme));
 
 
 echo '</select>
@@ -466,19 +466,19 @@ if (empty($stkd))
 	}
 else
 	{
-	$qstx = mysql_query("SELECT * FROM m_satuan ".
+	$qstx = mysqli_query($koneksi, "SELECT * FROM m_satuan ".
 							"WHERE kd = '$stkd'");
-	$rstx = mysql_fetch_assoc($qstx);
+	$rstx = mysqli_fetch_assoc($qstx);
 	$stx = balikin($rstx['satuan']);
 
 	echo '<option value="'.$stkd.'" selected>'.$stx.'</option>';
 	}
 
 //satuan
-$qst = mysql_query("SELECT * FROM m_satuan ".
+$qst = mysqli_query($koneksi, "SELECT * FROM m_satuan ".
 						"WHERE kd <> '$stkd' ".
 						"ORDER BY satuan ASC");
-$rst = mysql_fetch_assoc($qst);
+$rst = mysqli_fetch_assoc($qst);
 
 do
 	{
@@ -487,7 +487,7 @@ do
 
 	echo '<option value="'.$stkd.'">'.$st.'</option>';
 	}
-while ($rst = mysql_fetch_assoc($qst));
+while ($rst = mysqli_fetch_assoc($qst));
 
 
 echo '</select>

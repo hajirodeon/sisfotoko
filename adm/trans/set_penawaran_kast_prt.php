@@ -55,14 +55,14 @@ $diload = "window.print();location.href='$ke';";
 ob_start();
 
 //query
-$qdata = mysql_query("SELECT kastumer_brg_detail.*, kastumer_brg_detail.kd AS kbkd, ".
+$qdata = mysqli_query($koneksi, "SELECT kastumer_brg_detail.*, kastumer_brg_detail.kd AS kbkd, ".
 						"m_brg.* ".
 						"FROM kastumer_brg_detail, m_brg ".
 						"WHERE kastumer_brg_detail.kd_brg = m_brg.kd ".
 						"AND kastumer_brg_detail.kd_kastumer_brg = '$pwkd' ".
 						"ORDER BY m_brg.nama ASC");
-$rdata = mysql_fetch_assoc($qdata);
-$tdata = mysql_num_rows($qdata);
+$rdata = mysqli_fetch_assoc($qdata);
+$tdata = mysqli_num_rows($qdata);
 
 
 
@@ -123,16 +123,16 @@ if ($tdata != 0)
 
 
 		//harga di stock
-		$qstk = mysql_query("SELECT * FROM stock ".
+		$qstk = mysqli_query($koneksi, "SELECT * FROM stock ".
 								"WHERE kd_brg = '$y_brgkd'");
-		$rstk = mysql_fetch_assoc($qstk);
+		$rstk = mysqli_fetch_assoc($qstk);
 		$stk_hjual = nosql($rstk['hrg_jual']);
 
 
 		//satuan
-		$qstu = mysql_query("SELECT * FROM m_satuan ".
+		$qstu = mysqli_query($koneksi, "SELECT * FROM m_satuan ".
 								"WHERE kd = '$y_stkd'");
-		$rstu = mysql_fetch_assoc($qstu);
+		$rstu = mysqli_fetch_assoc($qstu);
 		$y_satuan = balikin($rstu['satuan']);
 
 
@@ -175,7 +175,7 @@ if ($tdata != 0)
 		<td align="right">'.$d_muhrg.'</td>
 		</tr>';
 		}
-	while ($rdata = mysql_fetch_assoc($qdata));
+	while ($rdata = mysqli_fetch_assoc($qdata));
 	}
 
 

@@ -64,9 +64,9 @@ if ($s == "edit")
 	{
 	$kdx = nosql($_REQUEST['kd']);
 
-	$qx = mysql_query("SELECT * FROM m_kastumer ".
+	$qx = mysqli_query($koneksi, "SELECT * FROM m_kastumer ".
 						"WHERE kd = '$kdx'");
-	$rowx = mysql_fetch_assoc($qx);
+	$rowx = mysqli_fetch_assoc($qx);
 
 	$nama = balikin($rowx['nama']);
 	$singkatan = balikin($rowx['singkatan']);
@@ -115,10 +115,10 @@ if ($_POST['btnSMP'])
 		}
 	else
 		{ ///cek
-		$qcc = mysql_query("SELECT * FROM m_kastumer ".
+		$qcc = mysqli_query($koneksi, "SELECT * FROM m_kastumer ".
 								"WHERE nama = '$nama'");
-		$rcc = mysql_fetch_assoc($qcc);
-		$tcc = mysql_num_rows($qcc);
+		$rcc = mysqli_fetch_assoc($qcc);
+		$tcc = mysqli_num_rows($qcc);
 
 
 		//nek duplikasi, lebih dari 1
@@ -138,7 +138,7 @@ if ($_POST['btnSMP'])
 			//jika update
 			if ($s == "edit")
 				{
-				mysql_query("UPDATE m_kastumer SET nama = '$nama', ".
+				mysqli_query($koneksi, "UPDATE m_kastumer SET nama = '$nama', ".
 								"singkatan = '$singkatan', ".
 								"alamat = '$alamat', ".
 								"telp = '$telp', ".

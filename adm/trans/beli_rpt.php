@@ -63,9 +63,9 @@ echo '<table width="100%" border="0" cellspacing="0" cellpadding="3">
 <td>
 <strong>Supplier : </strong>';
 //terpilih
-$qsupx = mysql_query("SELECT * FROM m_supplier ".
+$qsupx = mysqli_query($koneksi, "SELECT * FROM m_supplier ".
 						"WHERE kd = '$supkd'");
-$rsupx = mysql_fetch_assoc($qsupx);
+$rsupx = mysqli_fetch_assoc($qsupx);
 $supx_kd = nosql($rsupx['kd']);
 $supx_nm = balikin($rsupx['singkatan']);
 
@@ -77,21 +77,21 @@ $xtgl1 $arrbln[$xbln1] $xthn1,
 <strong>No. Faktur : </strong>";
 
 //terpilih
-$qtru = mysql_query("SELECT * FROM beli ".
+$qtru = mysqli_query($koneksi, "SELECT * FROM beli ".
 						"WHERE round(DATE_FORMAT(tgl_beli, '%d')) = '$xtgl1' ".
 						"AND round(DATE_FORMAT(tgl_beli, '%m')) = '$xbln1' ".
 						"AND round(DATE_FORMAT(tgl_beli, '%Y')) = '$xthn1' ".
 						"AND kd = '$belkd'");
-$rtru = mysql_fetch_assoc($qtru);
+$rtru = mysqli_fetch_assoc($qtru);
 $x_belkd = $belkd;
 $x_nofak = balikin($rtru['no_faktur']);
 
 
 //terpilih --> total item
-$qtru2 = mysql_query("SELECT * FROM beli_detail ".
+$qtru2 = mysqli_query($koneksi, "SELECT * FROM beli_detail ".
 						"WHERE kd_beli = '$belkd'");
-$rtru2 = mysql_fetch_assoc($qtru2);
-$ttru2 = mysql_num_rows($qtru2);
+$rtru2 = mysqli_fetch_assoc($qtru2);
+$ttru2 = mysqli_num_rows($qtru2);
 $x_beli_items = nosql($ttru2);
 
 echo "$x_nofak => [Total : $x_beli_items Item]";
@@ -100,7 +100,7 @@ echo '</td>
 </table>';
 
 //query view
-$qteh = mysql_query("SELECT beli.*, DATE_FORMAT(beli.tgl_jtempo, '%d') AS ttgl, ".
+$qteh = mysqli_query($koneksi, "SELECT beli.*, DATE_FORMAT(beli.tgl_jtempo, '%d') AS ttgl, ".
 						"DATE_FORMAT(beli.tgl_jtempo, '%m') AS tbln, ".
 						"DATE_FORMAT(beli.tgl_jtempo, '%Y') AS tthn, ".
 						"DATE_FORMAT(beli.tgl_lunas, '%d') AS ltgl, ".
@@ -108,15 +108,15 @@ $qteh = mysql_query("SELECT beli.*, DATE_FORMAT(beli.tgl_jtempo, '%d') AS ttgl, 
 						"DATE_FORMAT(beli.tgl_lunas, '%Y') AS lthn ".
 						"FROM beli ".
 						"WHERE beli.kd = '$belkd'");
-$rteh = mysql_fetch_assoc($qteh);
+$rteh = mysqli_fetch_assoc($qteh);
 $e_nofak = balikin($rteh['no_faktur']);
 
 //jenis pembayaran
 $e_jns_byr_kd = nosql($rteh['kd_jns_byr']);
 
-$qjbr = mysql_query("SELECT * FROM m_jns_byr ".
+$qjbr = mysqli_query($koneksi, "SELECT * FROM m_jns_byr ".
 						"WHERE kd = '$e_jns_byr_kd'");
-$rjbr = mysql_fetch_assoc($qjbr);
+$rjbr = mysqli_fetch_assoc($qjbr);
 $jbr_nm = balikin($rjbr['jns_byr']);
 $e_jns_byr_nm = $jbr_nm;
 
@@ -140,11 +140,11 @@ $e_diskon = nosql($rteh['diskon']);
 $e_ppn = nosql($rteh['ppn']);
 
 //total sementara
-$qduwi = mysql_query("SELECT SUM(subtotal) AS subtotal ".
+$qduwi = mysqli_query($koneksi, "SELECT SUM(subtotal) AS subtotal ".
 						"FROM beli_detail ".
 						"WHERE kd_beli = '$belkd' ".
 						"AND bonus = 'false'");
-$rduwi = mysql_fetch_assoc($qduwi);
+$rduwi = mysqli_fetch_assoc($qduwi);
 $e_total_beli = nosql($rduwi['subtotal']);
 $e_total_diskon = round((($e_diskon * $e_total_beli)/100),2);
 $e_total_bayar = round(nosql($rteh['total_bayar']),2);
@@ -210,7 +210,7 @@ echo '</td>
 <br>';
 
 //detail item / barang
-$qdata = mysql_query("SELECT beli_detail.*, beli_detail.kd AS bdkd, ".
+$qdata = mysqli_query($koneksi, "SELECT beli_detail.*, beli_detail.kd AS bdkd, ".
 						"m_brg.*, m_satuan.*, m_merk.* ".
 						"FROM beli_detail, m_brg, m_satuan, m_merk ".
 						"WHERE beli_detail.kd_brg = m_brg.kd ".
@@ -218,8 +218,8 @@ $qdata = mysql_query("SELECT beli_detail.*, beli_detail.kd AS bdkd, ".
 						"AND m_brg.kd_merk = m_merk.kd ".
 						"AND beli_detail.kd_beli = '$belkd' ".
 						"ORDER BY beli_detail.bonus DESC, m_brg.kode ASC");
-$rdata = mysql_fetch_assoc($qdata);
-$tdata = mysql_num_rows($qdata);
+$rdata = mysqli_fetch_assoc($qdata);
+$tdata = mysqli_num_rows($qdata);
 
 echo '<table width="100%" border="1" cellspacing="0" cellpadding="3">
 <tr bgcolor="'.$warnaheader.'">
@@ -290,7 +290,7 @@ if ($tdata != "0")
 		<td align="right">'.$d_subtotal.'</td>
 		</tr>';
 		}
-	while ($rdata = mysql_fetch_assoc($qdata));
+	while ($rdata = mysqli_fetch_assoc($qdata));
 	}
 
 echo '</table>

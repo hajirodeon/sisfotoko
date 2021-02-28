@@ -70,10 +70,10 @@ if ($_POST['btnOK'])
 
 
 	//cek
-	$qcc = mysql_query("SELECT * FROM m_brg ".
+	$qcc = mysqli_query($koneksi, "SELECT * FROM m_brg ".
 							"WHERE kode = '$kode'");
-	$rcc = mysql_fetch_assoc($qcc);
-	$tcc = mysql_num_rows($qcc);
+	$rcc = mysqli_fetch_assoc($qcc);
+	$tcc = mysqli_num_rows($qcc);
 	$cc_kd = nosql($rcc['kd']);
 
 
@@ -111,12 +111,12 @@ $sqlcount = "SELECT nota.*, nota_detail.*, m_brg.*, m_brg.nama AS mbnm, ".
 
 $sqlresult = $sqlcount;
 
-$count = mysql_num_rows(mysql_query($sqlcount));
+$count = mysqli_num_rows(mysqli_query($sqlcount));
 $pages = $p->findPages($count, $limit);
-$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 $target = "$filenya?brgkd=$brgkd&xbln1=$xbln1&xthn1=$xthn1";
 $pagelist = $p->pageList($_GET['page'], $pages, $target);
-$data = mysql_fetch_array($result);
+$data = mysqli_fetch_array($result);
 
 //nilai data
 $brg_kode = nosql($data['kode']);
@@ -185,16 +185,16 @@ echo "<select name=\"xthn1\" onChange=\"MM_jumpMenu('self',this,0)\">";
 echo '<option value="'.$xthn1.'" selected>'.$xthn1.'</option>';
 
 //query
-$qthn = mysql_query("SELECT * FROM m_tahun ".
+$qthn = mysqli_query($koneksi, "SELECT * FROM m_tahun ".
 						"ORDER BY tahun DESC");
-$rthn = mysql_fetch_assoc($qthn);
+$rthn = mysqli_fetch_assoc($qthn);
 
 do
 	{
 	$x_thn = nosql($rthn['tahun']);
 	echo '<option value="'.$filenya.'?xbln1='.$xbln1.'&xthn1='.$x_thn.'">'.$x_thn.'</option>';
 	}
-while ($rthn = mysql_fetch_assoc($qthn));
+while ($rthn = mysqli_fetch_assoc($qthn));
 
 echo '</select>,
 <strong>Kode Barang : </strong>
@@ -278,7 +278,7 @@ else
 			<td>'.$y_qty.' '.$y_satuan.'</td>
 	        </tr>';
 			}
-		while ($data = mysql_fetch_assoc($result));
+		while ($data = mysqli_fetch_assoc($result));
 
 		echo '</table>
 

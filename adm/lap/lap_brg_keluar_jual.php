@@ -80,12 +80,12 @@ $sqlcount = "SELECT DISTINCT(kd_brg) ".
 
 $sqlresult = $sqlcount;
 
-$count = mysql_num_rows(mysql_query($sqlcount));
+$count = mysqli_num_rows(mysqli_query($sqlcount));
 $pages = $p->findPages($count, $limit);
-$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 $target = "$filenya?xtgl1=$xtgl1&xbln1=$xbln1&xthn1=$xthn1";
 $pagelist = $p->pageList($_GET['page'], $pages, $target);
-$data = mysql_fetch_array($result);
+$data = mysqli_fetch_array($result);
 
 //require
 require("../../inc/js/jumpmenu.js");
@@ -135,15 +135,15 @@ echo "<select name=\"xthn1\" onChange=\"MM_jumpMenu('self',this,0)\">";
 echo '<option value="'.$xthn1.'" selected>'.$xthn1.'</option>';
 
 //query
-$qthn = mysql_query("SELECT * FROM m_tahun ");
-$rthn = mysql_fetch_assoc($qthn);
+$qthn = mysqli_query($koneksi, "SELECT * FROM m_tahun ");
+$rthn = mysqli_fetch_assoc($qthn);
 
 do
 	{
 	$x_thn = nosql($rthn['tahun']);
 	echo '<option value="'.$filenya.'?xtgl1='.$xtgl1.'&xbln1='.$xbln1.'&xthn1='.$x_thn.'">'.$x_thn.'</option>';
 	}
-while ($rthn = mysql_fetch_assoc($qthn));
+while ($rthn = mysqli_fetch_assoc($qthn));
 
 echo '</select>
 </td>
@@ -194,26 +194,26 @@ else
 			$brgkd = nosql($data['kd_brg']);
 
 			//artinya....
-			$qbrg = mysql_query("SELECT m_brg.*, m_satuan.* ".
+			$qbrg = mysqli_query($koneksi, "SELECT m_brg.*, m_satuan.* ".
 									"FROM m_brg, m_satuan ".
 									"WHERE m_brg.kd_satuan = m_satuan.kd ".
 									"AND m_brg.kd = '$brgkd'");
-			$rbrg = mysql_fetch_assoc($qbrg);
-			$tbrg = mysql_num_rows($qbrg);
+			$rbrg = mysqli_fetch_assoc($qbrg);
+			$tbrg = mysqli_num_rows($qbrg);
 			$brg_kode = balikin($rbrg['kode']);
 			$brg_nama = balikin($rbrg['nama']);
 			$brg_satuan = balikin($rbrg['satuan']);
 
 
 			//jumlahnya
-			$qjml = mysql_query("SELECT SUM(qty) AS jml ".
+			$qjml = mysqli_query($koneksi, "SELECT SUM(qty) AS jml ".
 									"FROM jual, jual_detail ".
 									"WHERE jual_detail.kd_jual = jual.kd ".
 									"AND round(DATE_FORMAT(jual.tgl_jual, '%d')) = '$xtgl1' ".
 									"AND round(DATE_FORMAT(jual.tgl_jual, '%m')) = '$xbln1' ".
 									"AND round(DATE_FORMAT(jual.tgl_jual, '%Y')) = '$xthn1' ".
 									"AND jual_detail.kd_brg = '$brgkd'");
-			$rjml = mysql_fetch_assoc($qjml);
+			$rjml = mysqli_fetch_assoc($qjml);
 			$jml_qty = nosql($rjml['jml']);
 
 			echo "<tr bgcolor=\"$warna\" onmouseover=\"this.bgColor='$warnaover';\" onmouseout=\"this.bgColor='$warna';\">";
@@ -224,7 +224,7 @@ else
 			</td>
 	        </tr>';
 			}
-		while ($data = mysql_fetch_assoc($result));
+		while ($data = mysqli_fetch_assoc($result));
 
 		echo '</table>
 		<table width="500" border="0" cellspacing="0" cellpadding="3">

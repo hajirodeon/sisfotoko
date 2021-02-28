@@ -72,11 +72,11 @@ if ($_POST['btnSMP'])
 
 	$sqlresult = $sqlcount;
 
-	$count = mysql_num_rows(mysql_query($sqlcount));
+	$count = mysqli_num_rows(mysqli_query($sqlcount));
 	$pages = $p->findPages($count, $limit);
-	$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+	$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 	$pagelist = $p->pageList($_GET['page'], $pages, $target);
-	$data = mysql_fetch_array($result);
+	$data = mysqli_fetch_array($result);
 
 
 	do
@@ -111,12 +111,12 @@ if ($_POST['btnSMP'])
 		$tgl_l = "$xlthnx:$xlblnx:$xltglx";
 
 		//query
-		mysql_query("UPDATE beli SET kd_jns_byr = '$xbyrx', ".
+		mysqli_query($koneksi, "UPDATE beli SET kd_jns_byr = '$xbyrx', ".
 						"bank = '$xbankx', ".
 						"tgl_lunas = '$tgl_l' ".
 						"WHERE kd = '$xkdx'");
 		}
-	while ($data = mysql_fetch_assoc($result));
+	while ($data = mysqli_fetch_assoc($result));
 
 	//null-kan
 	xfree($qbw);
@@ -163,9 +163,9 @@ echo '</td>
 <strong>Supplier : </strong>';
 
 //terpilih
-$qsupx = mysql_query("SELECT * FROM m_supplier ".
+$qsupx = mysqli_query($koneksi, "SELECT * FROM m_supplier ".
 						"WHERE kd = '$supkd'");
-$rsupx = mysql_fetch_assoc($qsupx);
+$rsupx = mysqli_fetch_assoc($qsupx);
 $supx_nm = balikin($rsupx['singkatan']);
 
 
@@ -173,10 +173,10 @@ echo "<select name=\"supplier\" onChange=\"MM_jumpMenu('self',this,0)\">";
 echo '<option value="'.$supkd.'" selected>'.$supx_nm.'</option>';
 
 //query
-$qsup = mysql_query("SELECT * FROM m_supplier ".
+$qsup = mysqli_query($koneksi, "SELECT * FROM m_supplier ".
 						"WHERE kd <> '$supkd' ".
 						"ORDER BY singkatan ASC");
-$rsup = mysql_fetch_assoc($qsup);
+$rsup = mysqli_fetch_assoc($qsup);
 
 do
 	{
@@ -184,7 +184,7 @@ do
 	$sup_nm = balikin($rsup['singkatan']);
 	echo '<option value="'.$filenya.'?supkd='.$sup_kd.'">'.$sup_nm.'</option>';
 	}
-while ($rsup = mysql_fetch_assoc($qsup));
+while ($rsup = mysqli_fetch_assoc($qsup));
 
 echo '</select>
 </td>
@@ -215,12 +215,12 @@ else
 					"ORDER BY tgl_beli DESC";
 	$sqlresult = $sqlcount;
 
-	$count = mysql_num_rows(mysql_query($sqlcount));
+	$count = mysqli_num_rows(mysqli_query($sqlcount));
 	$pages = $p->findPages($count, $limit);
-	$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+	$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 	$target = "$filenya?supkd=$supkd";
 	$pagelist = $p->pageList($_GET['page'], $pages, $target);
-	$data = mysql_fetch_array($result);
+	$data = mysqli_fetch_array($result);
 
 	if ($count != 0)
 		{
@@ -257,11 +257,11 @@ else
 			$y_tot_byr = nosql($data['total_bayar']);
 
 			//total sementara
-			$qduwi = mysql_query("SELECT SUM(subtotal) AS subtotal ".
+			$qduwi = mysqli_query($koneksi, "SELECT SUM(subtotal) AS subtotal ".
 									"FROM beli_detail ".
 									"WHERE kd_beli = '$y_kd' ".
 									"AND bonus = 'false'");
-			$rduwi = mysql_fetch_assoc($qduwi);
+			$rduwi = mysqli_fetch_assoc($qduwi);
 			$y_total_beli = nosql($rduwi['subtotal']);
 			$y_total_diskon = round((($y_diskon * $total_beli)/100),2);
 
@@ -322,17 +322,17 @@ else
 			<select name="byr'.$nomer.'">';
 
 			//terpilih
-			$qbyrx = mysql_query("SELECT * FROM m_jns_byr ".
+			$qbyrx = mysqli_query($koneksi, "SELECT * FROM m_jns_byr ".
 									"WHERE kd = '$y_kd_byr'");
-			$rbyrx = mysql_fetch_assoc($qbyrx);
+			$rbyrx = mysqli_fetch_assoc($qbyrx);
 			$byrx_nm = balikin($rbyrx['jns_byr']);
 
 			echo '<option value="'.$y_kd_byr.'" selected>'.$byrx_nm.'</option>';
 
 			//data jenis pembayaran
-			$qbyr = mysql_query("SELECT * FROM m_jns_byr ".
+			$qbyr = mysqli_query($koneksi, "SELECT * FROM m_jns_byr ".
 									"WHERE kd <> '$y_kd_byr'");
-			$rbyr = mysql_fetch_assoc($qbyr);
+			$rbyr = mysqli_fetch_assoc($qbyr);
 
 			do
 				{
@@ -341,7 +341,7 @@ else
 
 				echo '<option value="'.$byr_kd.'">'.$byr_nm.'</option>';
 				}
-			while ($rbyr = mysql_fetch_assoc($qbyr));
+			while ($rbyr = mysqli_fetch_assoc($qbyr));
 
 			echo '</select>
 			</td>
@@ -376,23 +376,23 @@ else
 			<option value="'.$y_lthn.'" selected>'.$y_lthn.'</option>';
 
 			//query
-			$qthn2 = mysql_query("SELECT * FROM m_tahun ".
+			$qthn2 = mysqli_query($koneksi, "SELECT * FROM m_tahun ".
 									"ORDER BY tahun DESC");
-			$rthn2 = mysql_fetch_assoc($qthn2);
+			$rthn2 = mysqli_fetch_assoc($qthn2);
 
 			do
 				{
 				$x_thn2 = nosql($rthn2['tahun']);
 				echo '<option value="'.$x_thn2.'">'.$x_thn2.'</option>';
 				}
-			while ($rthn2 = mysql_fetch_assoc($qthn2));
+			while ($rthn2 = mysqli_fetch_assoc($qthn2));
 
 			echo '</select>
 			</td>
 
 	        </tr>';
 			}
-		while ($data = mysql_fetch_assoc($result));
+		while ($data = mysqli_fetch_assoc($result));
 
 		echo '</table>
 		<table width="900" border="0" cellspacing="0" cellpadding="3">

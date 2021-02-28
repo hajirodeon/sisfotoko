@@ -63,10 +63,10 @@ if ($_POST['btnBR'])
 	else
 		{
 		//cek
-		$qcc = mysql_query("SELECT * FROM admks ".
+		$qcc = mysqli_query($koneksi, "SELECT * FROM admks ".
 								"WHERE username = '$xuserx'");
-		$rcc = mysql_fetch_assoc($qcc);
-		$tcc = mysql_num_rows($qcc);
+		$rcc = mysqli_fetch_assoc($qcc);
+		$tcc = mysqli_num_rows($qcc);
 
 		//nek ada
 		if ($tcc != 0)
@@ -84,7 +84,7 @@ if ($_POST['btnBR'])
 		else
 			{
 			//masukin
-			mysql_query("INSERT INTO admks(kd, username, password, postdate) VALUES ".
+			mysqli_query($koneksi, "INSERT INTO admks(kd, username, password, postdate) VALUES ".
 							"('$x', '$xuserx', '$xpassx', '$today')");
 
 			//null-kan
@@ -118,13 +118,13 @@ if ($_POST['btnRST'])
 	else
 		{
 		//username e...
-		$qstu = mysql_query("SELECT * FROM admks ".
+		$qstu = mysqli_query($koneksi, "SELECT * FROM admks ".
 								"WHERE kd = '$item'");
-		$rstu = mysql_fetch_assoc($qstu);
+		$rstu = mysqli_fetch_assoc($qstu);
 		$stunama = nosql($rstu['username']);
 
 		//reset password
-		mysql_query("UPDATE admks SET password = '$passbrx', ".
+		mysqli_query($koneksi, "UPDATE admks SET password = '$passbrx', ".
 						"postdate = '$today' ".
 						"WHERE kd = '$item'");
 
@@ -161,7 +161,7 @@ if ($_POST['btnHPS'])
 		}
 	else
 		{
-		mysql_query("DELETE FROM admks ".
+		mysqli_query($koneksi, "DELETE FROM admks ".
 						"WHERE kd = '$item'");
 
 		//null-kan
@@ -215,10 +215,10 @@ echo '<form action="'.$filenya.'" method="post" name="formx">
 <td><strong><font color="'.$warnatext.'">Username</font></strong></td>
 </tr>';
 
-$qdm = mysql_query("SELECT * FROM admks ".
+$qdm = mysqli_query($koneksi, "SELECT * FROM admks ".
 						"WHERE username <> 'admin'");
-$rdm = mysql_fetch_assoc($qdm);
-$tdm = mysql_num_rows($qdm);
+$rdm = mysqli_fetch_assoc($qdm);
+$tdm = mysqli_num_rows($qdm);
 
 if ($tdm != 0)
 	{
@@ -247,7 +247,7 @@ if ($tdm != 0)
 		<td>'.$useryz.'</td>
 		</tr>';
 		}
-	while ($rdm = mysql_fetch_assoc($qdm));
+	while ($rdm = mysqli_fetch_assoc($qdm));
 	}
 
 echo '</table>

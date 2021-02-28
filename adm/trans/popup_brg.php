@@ -102,12 +102,12 @@ if ($_POST['btnCRI'])
 
 			$sqlresult = $sqlcount;
 
-			$count = mysql_num_rows(mysql_query($sqlcount));
+			$count = mysqli_num_rows(mysqli_query($sqlcount));
 			$pages = $p->findPages($count, $limit);
-			$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+			$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 			$target = "$filenya?katcari=$katcari&kunci=$kunci";
 			$pagelist = $p->pageList($_GET['page'], $pages, $target);
-			$data = mysql_fetch_assoc($result);
+			$data = mysqli_fetch_assoc($result);
 			}
 
 		//nek nama ==> c02
@@ -121,12 +121,12 @@ if ($_POST['btnCRI'])
 
 			$sqlresult = $sqlcount;
 
-			$count = mysql_num_rows(mysql_query($sqlcount));
+			$count = mysqli_num_rows(mysqli_query($sqlcount));
 			$pages = $p->findPages($count, $limit);
-			$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+			$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 			$target = "$filenya?katcari=$katcari&kunci=$kunci";
 			$pagelist = $p->pageList($_GET['page'], $pages, $target);
-			$data = mysql_fetch_assoc($result);
+			$data = mysqli_fetch_assoc($result);
 			}
 
 		//nek kategori ==> c03
@@ -141,12 +141,12 @@ if ($_POST['btnCRI'])
 
 			$sqlresult = $sqlcount;
 
-			$count = mysql_num_rows(mysql_query($sqlcount));
+			$count = mysqli_num_rows(mysqli_query($sqlcount));
 			$pages = $p->findPages($count, $limit);
-			$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+			$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 			$target = "$filenya?katcari=$katcari&kunci=$kunci";
 			$pagelist = $p->pageList($_GET['page'], $pages, $target);
-			$data = mysql_fetch_assoc($result);
+			$data = mysqli_fetch_assoc($result);
 			}
 
 		//nek merk ==> c04
@@ -161,12 +161,12 @@ if ($_POST['btnCRI'])
 
 			$sqlresult = $sqlcount;
 
-			$count = mysql_num_rows(mysql_query($sqlcount));
+			$count = mysqli_num_rows(mysqli_query($sqlcount));
 			$pages = $p->findPages($count, $limit);
-			$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+			$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 			$target = "$filenya?katcari=$katcari&kunci=$kunci";
 			$pagelist = $p->pageList($_GET['page'], $pages, $target);
-			$data = mysql_fetch_assoc($result);
+			$data = mysqli_fetch_assoc($result);
 			}
 
 		//nek satuan ==> c05
@@ -181,12 +181,12 @@ if ($_POST['btnCRI'])
 
 			$sqlresult = $sqlcount;
 
-			$count = mysql_num_rows(mysql_query($sqlcount));
+			$count = mysqli_num_rows(mysqli_query($sqlcount));
 			$pages = $p->findPages($count, $limit);
-			$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+			$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 			$target = "$filenya?katcari=$katcari&kunci=$kunci";
 			$pagelist = $p->pageList($_GET['page'], $pages, $target);
-			$data = mysql_fetch_assoc($result);
+			$data = mysqli_fetch_assoc($result);
 			}
 		}
 	}
@@ -203,12 +203,12 @@ else
 
 		$sqlresult = $sqlcount;
 
-		$count = mysql_num_rows(mysql_query($sqlcount));
+		$count = mysqli_num_rows(mysqli_query($sqlcount));
 		$pages = $p->findPages($count, $limit);
-		$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+		$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 		$target = "$filenya?katcari=$katcari&kunci=$kunci";
 		$pagelist = $p->pageList($_GET['page'], $pages, $target);
-		$data = mysql_fetch_assoc($result);
+		$data = mysqli_fetch_assoc($result);
 		}
 
 	//nek nama ==> c02
@@ -222,12 +222,12 @@ else
 
 		$sqlresult = $sqlcount;
 
-		$count = mysql_num_rows(mysql_query($sqlcount));
+		$count = mysqli_num_rows(mysqli_query($sqlcount));
 		$pages = $p->findPages($count, $limit);
-		$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+		$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 		$target = "$filenya?katcari=$katcari&kunci=$kunci";
 		$pagelist = $p->pageList($_GET['page'], $pages, $target);
-		$data = mysql_fetch_assoc($result);
+		$data = mysqli_fetch_assoc($result);
 		}
 
 	//nek kategori ==> c03
@@ -242,12 +242,12 @@ else
 
 		$sqlresult = $sqlcount;
 
-		$count = mysql_num_rows(mysql_query($sqlcount));
+		$count = mysqli_num_rows(mysqli_query($sqlcount));
 		$pages = $p->findPages($count, $limit);
-		$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+		$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 		$target = "$filenya?katcari=$katcari&kunci=$kunci";
 		$pagelist = $p->pageList($_GET['page'], $pages, $target);
-		$data = mysql_fetch_assoc($result);
+		$data = mysqli_fetch_assoc($result);
 		}
 
 	//nek merk ==> c04
@@ -262,12 +262,12 @@ else
 
 		$sqlresult = $sqlcount;
 
-		$count = mysql_num_rows(mysql_query($sqlcount));
+		$count = mysqli_num_rows(mysqli_query($sqlcount));
 		$pages = $p->findPages($count, $limit);
-		$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+		$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 		$target = "$filenya?katcari=$katcari&kunci=$kunci";
 		$pagelist = $p->pageList($_GET['page'], $pages, $target);
-		$data = mysql_fetch_assoc($result);
+		$data = mysqli_fetch_assoc($result);
 		}
 
 	//nek satuan ==> c05
@@ -282,12 +282,12 @@ else
 
 		$sqlresult = $sqlcount;
 
-		$count = mysql_num_rows(mysql_query($sqlcount));
+		$count = mysqli_num_rows(mysqli_query($sqlcount));
 		$pages = $p->findPages($count, $limit);
-		$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+		$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 		$target = "$filenya?katcari=$katcari&kunci=$kunci";
 		$pagelist = $p->pageList($_GET['page'], $pages, $target);
-		$data = mysql_fetch_assoc($result);
+		$data = mysqli_fetch_assoc($result);
 		}
 	}
 
@@ -358,23 +358,23 @@ else
 
 			//kategori
 			$katkd = nosql($data['kd_kategori']);
-			$qikat = mysql_query("SELECT * FROM m_kategori ".
+			$qikat = mysqli_query($koneksi, "SELECT * FROM m_kategori ".
 									"WHERE kd = '$katkd'");
-			$rikat = mysql_fetch_assoc($qikat);
+			$rikat = mysqli_fetch_assoc($qikat);
 			$ikat_kat = balikin($rikat['kategori']);
 
 			//satuan
 			$stkd = nosql($data['kd_satuan']);
-			$qist = mysql_query("SELECT * FROM m_satuan ".
+			$qist = mysqli_query($koneksi, "SELECT * FROM m_satuan ".
 									"WHERE kd = '$stkd'");
-			$rist = mysql_fetch_assoc($qist);
+			$rist = mysqli_fetch_assoc($qist);
 			$ist_st = balikin($rist['satuan']);
 
 			//mer
 			$merkkd = nosql($data['kd_merk']);
-			$qimerk = mysql_query("SELECT * FROM m_merk ".
+			$qimerk = mysqli_query($koneksi, "SELECT * FROM m_merk ".
 									"WHERE kd = '$merkkd'");
-			$rimerk = mysql_fetch_assoc($qimerk);
+			$rimerk = mysqli_fetch_assoc($qimerk);
 			$imerk_merk = balikin($rimerk['merk']);
 
 
@@ -414,7 +414,7 @@ else
 			<td>'.$jml_gudang.'</td>
 	        </tr>';
 			}
-		while ($data = mysql_fetch_assoc($result));
+		while ($data = mysqli_fetch_assoc($result));
 		}
 
 	echo '</table>

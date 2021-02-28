@@ -94,12 +94,12 @@ if ($_POST['btnTBH'])
 		else
 			{
 			//kd_brg ...kan
-			$qddf = mysql_query("SELECT stock.*, m_brg.*, m_brg.kd AS mbkd ".
+			$qddf = mysqli_query($koneksi, "SELECT stock.*, m_brg.*, m_brg.kd AS mbkd ".
 									"FROM stock, m_brg ".
 									"WHERE stock.kd_brg = m_brg.kd ".
 									"AND m_brg.kode = '$kode'");
-			$rddf = mysql_fetch_assoc($qddf);
-			$tddf = mysql_num_rows($qddf);
+			$rddf = mysqli_fetch_assoc($qddf);
+			$tddf = mysqli_num_rows($qddf);
 			$ddf_kd = nosql($rddf['mbkd']);
 			$ddf_hjual = nosql($rddf['hrg_jual']);
 			$ddf_nama = cegah($rddf['nama']);
@@ -109,10 +109,10 @@ if ($_POST['btnTBH'])
 			if ($tddf != 0)
 				{
 				//cek lagi, jika sudah ada
-				$qcc = mysql_query("SELECT * FROM penawaran_brg ".
+				$qcc = mysqli_query($koneksi, "SELECT * FROM penawaran_brg ".
 										"WHERE kd_brg = '$ddf_kd'");
-				$rcc = mysql_fetch_assoc($qcc);
-				$tcc = mysql_num_rows($qcc);
+				$rcc = mysqli_fetch_assoc($qcc);
+				$tcc = mysqli_num_rows($qcc);
 
 				if ($tcc != 0)
 					{
@@ -129,7 +129,7 @@ if ($_POST['btnTBH'])
 				else
 					{
 					//insert
-					mysql_query("INSERT INTO penawaran_brg(kd, kd_brg, hrg_jual) VALUES ".
+					mysqli_query($koneksi, "INSERT INTO penawaran_brg(kd, kd_brg, hrg_jual) VALUES ".
 									"('$x', '$ddf_kd', '$ddf_hjual')");
 
 					//null-kan
@@ -181,7 +181,7 @@ if ($_POST['btnHPS'])
 		$kd = nosql($_POST["$yuhu"]);
 
 		//del
-		mysql_query("DELETE FROM penawaran_brg ".
+		mysqli_query($koneksi, "DELETE FROM penawaran_brg ".
 						"WHERE kd = '$kd'");
 		}
 
@@ -219,11 +219,11 @@ $sqlcount = "SELECT penawaran_brg.*, penawaran_brg.kd AS kbkd, ".
 
 $sqlresult = $sqlcount;
 
-$count = mysql_num_rows(mysql_query($sqlcount));
+$count = mysqli_num_rows(mysqli_query($sqlcount));
 $pages = $p->findPages($count, $limit);
-$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 $pagelist = $p->pageList($_GET['page'], $pages, $target);
-$data = mysql_fetch_array($result);
+$data = mysqli_fetch_array($result);
 
 //window
 echo '
@@ -328,21 +328,21 @@ if ($count != 0)
 		$y_stkd = balikin($data['kd_satuan']);
 
 		//kategori
-		$qkat = mysql_query("SELECT * FROM m_kategori ".
+		$qkat = mysqli_query($koneksi, "SELECT * FROM m_kategori ".
 								"WHERE kd = '$y_katkd'");
-		$rkat = mysql_fetch_assoc($qkat);
+		$rkat = mysqli_fetch_assoc($qkat);
 		$y_kategori = balikin($rkat['kategori']);
 
 		//merk
-		$qmer = mysql_query("SELECT * FROM m_merk ".
+		$qmer = mysqli_query($koneksi, "SELECT * FROM m_merk ".
 								"WHERE kd = '$y_merkkd'");
-		$rmer = mysql_fetch_assoc($qmer);
+		$rmer = mysqli_fetch_assoc($qmer);
 		$y_merk = balikin($rmer['merk']);
 
 		//satuan
-		$qstu = mysql_query("SELECT * FROM m_satuan ".
+		$qstu = mysqli_query($koneksi, "SELECT * FROM m_satuan ".
 								"WHERE kd = '$y_stkd'");
-		$rstu = mysql_fetch_assoc($qstu);
+		$rstu = mysqli_fetch_assoc($qstu);
 		$y_satuan = balikin($rstu['satuan']);
 
 
@@ -357,7 +357,7 @@ if ($count != 0)
 		<td>'.$y_satuan.'</td>
         </tr>';
 		}
-	while ($data = mysql_fetch_assoc($result));
+	while ($data = mysqli_fetch_assoc($result));
 	}
 
 

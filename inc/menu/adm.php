@@ -69,8 +69,8 @@ echo '</UL>';
 if ($username1_session == "admin")
 	{
 	//menu dan sub menu
-	$qmn = mysql_query("SELECT DISTINCT(no) FROM akses_menu");
-	$rmn = mysql_fetch_assoc($qmn);
+	$qmn = mysqli_query($koneksi, "SELECT DISTINCT(no) FROM akses_menu");
+	$rmn = mysqli_fetch_assoc($qmn);
 
 	do
 		{
@@ -90,10 +90,10 @@ if ($username1_session == "admin")
 		<UL>';
 
 		//sub menu
-		$qmni = mysql_query("SELECT * FROM akses_menu ".
+		$qmni = mysqli_query($koneksi, "SELECT * FROM akses_menu ".
 								"WHERE no = '$nox' ".
 								"ORDER BY no_sub ASC");
-		$rmni = mysql_fetch_assoc($qmni);
+		$rmni = mysqli_fetch_assoc($qmni);
 
 		do
 			{
@@ -105,19 +105,19 @@ if ($username1_session == "admin")
 			<a href=\"$sumber$menu_pathx$menu_filex\" title=\"$menu_judulx\">$menu_judulx</a>
 			</LI>";
 			}
-		while ($rmni = mysql_fetch_assoc($qmni));
+		while ($rmni = mysqli_fetch_assoc($qmni));
 
 
 		echo '</UL>';
 		}
-	while ($rmn = mysql_fetch_assoc($qmn));
+	while ($rmn = mysqli_fetch_assoc($qmn));
 	}
 
 else //jika user biasa, menu tertentu yg telah di-set saja, yg bisa digunakan.
 	{
 	//menu dan sub menu
-	$qmn = mysql_query("SELECT DISTINCT(no) FROM akses_menu");
-	$rmn = mysql_fetch_assoc($qmn);
+	$qmn = mysqli_query($koneksi, "SELECT DISTINCT(no) FROM akses_menu");
+	$rmn = mysqli_fetch_assoc($qmn);
 
 	do
 		{
@@ -137,14 +137,14 @@ else //jika user biasa, menu tertentu yg telah di-set saja, yg bisa digunakan.
 		<UL>';
 
 		//sub menu
-		$qmni = mysql_query("SELECT akses_admin.*, akses_menu.* ".
+		$qmni = mysqli_query($koneksi, "SELECT akses_admin.*, akses_menu.* ".
 								"FROM akses_admin, akses_menu ".
 								"WHERE akses_admin.kd_menu = akses_menu.kd ".
 								"AND akses_admin.kd_admin = '$kd1_session' ".
 								"AND akses_admin.status = 'true' ".
 								"AND akses_menu.no = '$nox' ".
 								"ORDER BY akses_menu.no_sub ASC");
-		$rmni = mysql_fetch_assoc($qmni);
+		$rmni = mysqli_fetch_assoc($qmni);
 
 		do
 			{
@@ -156,12 +156,12 @@ else //jika user biasa, menu tertentu yg telah di-set saja, yg bisa digunakan.
 			<a href=\"$sumber$menu_pathx$menu_filex\" title=\"$menu_judulx\">$menu_judulx</a>
 			</LI>";
 			}
-		while ($rmni = mysql_fetch_assoc($qmni));
+		while ($rmni = mysqli_fetch_assoc($qmni));
 
 
 		echo '</UL>';
 		}
-	while ($rmn = mysql_fetch_assoc($qmn));
+	while ($rmn = mysqli_fetch_assoc($qmn));
 	}
 
 

@@ -100,16 +100,16 @@ echo "<select name=\"xthn1\" onChange=\"MM_jumpMenu('self',this,0)\">";
 echo '<option value="'.$xthn1.'" selected>'.$xthn1.'</option>';
 
 //query
-$qthn = mysql_query("SELECT * FROM m_tahun ".
+$qthn = mysqli_query($koneksi, "SELECT * FROM m_tahun ".
 						"ORDER BY tahun DESC");
-$rthn = mysql_fetch_assoc($qthn);
+$rthn = mysqli_fetch_assoc($qthn);
 
 do
 	{
 	$x_thn = nosql($rthn['tahun']);
 	echo '<option value="'.$filenya.'?xbln1='.$xbln1.'&xthn1='.$x_thn.'">'.$x_thn.'</option>';
 	}
-while ($rthn = mysql_fetch_assoc($qthn));
+while ($rthn = mysqli_fetch_assoc($qthn));
 
 echo '</select>
 </td>
@@ -141,12 +141,12 @@ else
 					"ORDER BY tgl_beli DESC";
 	$sqlresult = $sqlcount;
 
-	$count = mysql_num_rows(mysql_query($sqlcount));
+	$count = mysqli_num_rows(mysqli_query($sqlcount));
 	$pages = $p->findPages($count, $limit);
-	$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+	$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 	$target = "$filenya?xbln1=$xbln1&xthn1=$xthn1";
 	$pagelist = $p->pageList($_GET['page'], $pages, $target);
-	$data = mysql_fetch_array($result);
+	$data = mysqli_fetch_array($result);
 
 	if ($count != 0)
 		{
@@ -185,10 +185,10 @@ else
 			$y_tot_byr = nosql($data['total_bayar']);
 
 			//total sementara
-			$qduwi = mysql_query("SELECT SUM(subtotal) AS subtotal ".
+			$qduwi = mysqli_query($koneksi, "SELECT SUM(subtotal) AS subtotal ".
 									"FROM beli_detail ".
 									"WHERE kd_beli = '$y_kd'");
-			$rduwi = mysql_fetch_assoc($qduwi);
+			$rduwi = mysqli_fetch_assoc($qduwi);
 			$y_total_beli = nosql($rduwi['subtotal']);
 			$y_total_diskon = round((($y_diskon * $total_beli)/100),2);
 
@@ -247,9 +247,9 @@ else
 
 			<td>';
 			//supplier
-			$qsup = mysql_query("SELECT * FROM m_supplier ".
+			$qsup = mysqli_query($koneksi, "SELECT * FROM m_supplier ".
 									"WHERE kd = '$y_supkd'");
-			$rsup = mysql_fetch_assoc($qsup);
+			$rsup = mysqli_fetch_assoc($qsup);
 			$sup_nm = balikin($rsup['singkatan']);
 
 			echo $sup_nm;
@@ -259,9 +259,9 @@ else
 			<td align="center">';
 
 			//terpilih
-			$qbyrx = mysql_query("SELECT * FROM m_jns_byr ".
+			$qbyrx = mysqli_query($koneksi, "SELECT * FROM m_jns_byr ".
 									"WHERE kd = '$y_kd_byr'");
-			$rbyrx = mysql_fetch_assoc($qbyrx);
+			$rbyrx = mysqli_fetch_assoc($qbyrx);
 			$byrx_nm = balikin($rbyrx['jns_byr']);
 
 			echo ''.$byrx_nm.'
@@ -281,7 +281,7 @@ else
 
 	        </tr>';
 			}
-		while ($data = mysql_fetch_assoc($result));
+		while ($data = mysqli_fetch_assoc($result));
 
 		echo '</table>
 		<table width="100%" border="0" cellspacing="0" cellpadding="3">

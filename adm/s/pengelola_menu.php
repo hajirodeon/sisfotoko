@@ -49,7 +49,7 @@ if ($_POST['btnSMP'])
 	$ke = "$filenya?uskd=$uskd&usnm=$usnm";
 
 	//netralkan dahulu
-	mysql_query("DELETE FROM akses_admin ".
+	mysqli_query($koneksi, "DELETE FROM akses_admin ".
 					"WHERE kd_admin = '$uskd'");
 
 	//looping menu
@@ -75,7 +75,7 @@ if ($_POST['btnSMP'])
 		$xu = md5("$x$i");
 
 		//insert
-		mysql_query("INSERT INTO akses_admin(kd, kd_admin, kd_menu, status) VALUES ".
+		mysqli_query($koneksi, "INSERT INTO akses_admin(kd, kd_admin, kd_menu, status) VALUES ".
 						"('$xu', '$uskd', '$xitemx', '$nil_st')");
 		}
 
@@ -110,10 +110,10 @@ echo '<form action="'.$filenya.'" method="post" name="formx">
 </tr>';
 
 //menu
-$qdm = mysql_query("SELECT * FROM akses_menu ".
+$qdm = mysqli_query($koneksi, "SELECT * FROM akses_menu ".
 						"ORDER BY no, no_sub ASC");
-$rdm = mysql_fetch_assoc($qdm);
-$tdm = mysql_num_rows($qdm);
+$rdm = mysqli_fetch_assoc($qdm);
+$tdm = mysqli_num_rows($qdm);
 
 do
 	{
@@ -137,11 +137,11 @@ do
 	<td>'.$dm_judul.'</td>';
 
 	//user punya menu
-	$qsmu = mysql_query("SELECT * FROM akses_admin ".
+	$qsmu = mysqli_query($koneksi, "SELECT * FROM akses_admin ".
 							"WHERE kd_admin = '$uskd' ".
 							"AND kd_menu = '$dm_kd'");
-	$rsmu = mysql_fetch_assoc($qsmu);
-	$tsmu = mysql_num_rows($qsmu);
+	$rsmu = mysqli_fetch_assoc($qsmu);
+	$tsmu = mysqli_num_rows($qsmu);
 	$smu_status = nosql($rsmu['status']);
 	$smu_kd = nosql($rsmu['kd']);
 
@@ -162,7 +162,7 @@ do
 	</td>
 	</tr>';
 	}
-while ($rdm = mysql_fetch_assoc($qdm));
+while ($rdm = mysqli_fetch_assoc($qdm));
 
 echo '</table>
 <input name="uskd" type="hidden" value="'.$uskd.'">

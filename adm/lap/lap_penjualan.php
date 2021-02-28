@@ -113,16 +113,16 @@ echo "<select name=\"xthn1\" onChange=\"MM_jumpMenu('self',this,0)\">";
 echo '<option value="'.$xthn1.'" selected>'.$xthn1.'</option>';
 
 //query
-$qthn = mysql_query("SELECT * FROM m_tahun ".
+$qthn = mysqli_query($koneksi, "SELECT * FROM m_tahun ".
 						"ORDER BY tahun DESC");
-$rthn = mysql_fetch_assoc($qthn);
+$rthn = mysqli_fetch_assoc($qthn);
 
 do
 	{
 	$x_thn = nosql($rthn['tahun']);
 	echo '<option value="'.$filenya.'?xtgl1='.$xtgl1.'&xbln1='.$xbln1.'&xthn1='.$x_thn.'">'.$x_thn.'</option>';
 	}
-while ($rthn = mysql_fetch_assoc($qthn));
+while ($rthn = mysqli_fetch_assoc($qthn));
 
 echo '</select>,
 
@@ -130,14 +130,14 @@ No. Faktur : ';
 echo "<select name=\"jukd\" onChange=\"MM_jumpMenu('self',this,0)\">";
 
 //terpilih
-$qtru = mysql_query("SELECT jual.*, jual.kd AS jukd, m_kastumer.*  ".
+$qtru = mysqli_query($koneksi, "SELECT jual.*, jual.kd AS jukd, m_kastumer.*  ".
 						"FROM jual, m_kastumer ".
 						"WHERE jual.kd_kastumer = m_kastumer.kd ".
 						"AND round(DATE_FORMAT(jual.tgl_jual, '%d')) = '$xtgl1' ".
 						"AND round(DATE_FORMAT(jual.tgl_jual, '%m')) = '$xbln1' ".
 						"AND round(DATE_FORMAT(jual.tgl_jual, '%Y')) = '$xthn1' ".
 						"AND jual.kd = '$jukd'");
-$rtru = mysql_fetch_assoc($qtru);
+$rtru = mysqli_fetch_assoc($qtru);
 $x_jukd = $jukd;
 $x_no_faktur = balikin($rtru['no_faktur']);
 $x_pelanggan = balikin($rtru['singkatan']);
@@ -146,16 +146,16 @@ $x_total = nosql($rtru['total_jual']);
 
 
 //terpilih --> total item
-$qtru2 = mysql_query("SELECT * FROM jual_detail ".
+$qtru2 = mysqli_query($koneksi, "SELECT * FROM jual_detail ".
 						"WHERE kd_jual = '$jukd'");
-$rtru2 = mysql_fetch_assoc($qtru2);
-$ttru2 = mysql_num_rows($qtru2);
+$rtru2 = mysqli_fetch_assoc($qtru2);
+$ttru2 = mysqli_num_rows($qtru2);
 $x_jual_items = nosql($ttru2);
 
 echo '<option value="'.$x_jukd.'" selected>'.$x_no_faktur.' => '.$x_jual_items.' Item, Kastumer : '.$x_pelanggan.'</option>';
 
 //data
-$qtrux = mysql_query("SELECT jual.*, jual.kd AS jukd, m_kastumer.*  ".
+$qtrux = mysqli_query($koneksi, "SELECT jual.*, jual.kd AS jukd, m_kastumer.*  ".
 						"FROM jual, m_kastumer ".
 						"WHERE jual.kd_kastumer = m_kastumer.kd ".
 						"AND round(DATE_FORMAT(jual.tgl_jual, '%d')) = '$xtgl1' ".
@@ -163,7 +163,7 @@ $qtrux = mysql_query("SELECT jual.*, jual.kd AS jukd, m_kastumer.*  ".
 						"AND round(DATE_FORMAT(jual.tgl_jual, '%Y')) = '$xthn1' ".
 						"AND jual.kd <> '$jukd' ".
 						"ORDER BY round(jual.no_faktur) ASC");
-$rtrux = mysql_fetch_assoc($qtrux);
+$rtrux = mysqli_fetch_assoc($qtrux);
 
 do
 	{
@@ -180,16 +180,16 @@ do
 
 
 	//jumlahnya
-	$qyukx = mysql_query("SELECT * FROM jual_detail ".
+	$qyukx = mysqli_query($koneksi, "SELECT * FROM jual_detail ".
 							"WHERE kd_jual = '$i_jukd'");
-	$ryukx = mysql_fetch_assoc($qyukx);
-	$tyukx = mysql_num_rows($qyukx);
+	$ryukx = mysqli_fetch_assoc($qyukx);
+	$tyukx = mysqli_num_rows($qyukx);
 	$i_jual_items = $tyukx;
 
 	echo '<option value="'.$filenya.'?xtgl1='.$xtgl1.'&xbln1='.$xbln1.'&xthn1='.$xthn1.'&jukd='.$i_jukd.'">
 	'.$i_no_faktur.' => '.$i_jual_items.' Item, Kastumer : '.$i_pelanggan.'. </option>';
 	}
-while ($rtrux = mysql_fetch_assoc($qtrux));
+while ($rtrux = mysqli_fetch_assoc($qtrux));
 
 echo '</select>
 </td>
@@ -218,7 +218,7 @@ else if (empty($jukd))
 else
 	{
 	//query
-	$qdata = mysql_query("SELECT jual.*, jual_detail.*, ".
+	$qdata = mysqli_query($koneksi, "SELECT jual.*, jual_detail.*, ".
 							"jual_detail.kd AS ndkd, ".
 							"jual_detail.qty AS ndqty, ".
 							"m_brg.*, m_satuan.*, stock.* ".
@@ -229,8 +229,8 @@ else
 							"AND stock.kd_brg = m_brg.kd ".
 							"AND jual.kd = '$jukd' ".
 							"ORDER BY m_brg.kode ASC");
-	$rdata = mysql_fetch_assoc($qdata);
-	$tdata = mysql_num_rows($qdata);
+	$rdata = mysqli_fetch_assoc($qdata);
+	$tdata = mysqli_num_rows($qdata);
 
 	if ($tdata != 0)
 		{
@@ -306,7 +306,7 @@ else
 			</td>
 	        </tr>';
 			}
-		while ($rdata = mysql_fetch_assoc($qdata));
+		while ($rdata = mysqli_fetch_assoc($qdata));
 
 		echo '</table>
 		<table width="800" border="0" cellspacing="0" cellpadding="3">

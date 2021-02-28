@@ -89,12 +89,12 @@ $sqlcount = "SELECT beli.*, beli_detail.*, ".
 				"ORDER BY beli_detail.bonus DESC, m_brg.kode ASC";
 $sqlresult = $sqlcount;
 
-$count = mysql_num_rows(mysql_query($sqlcount));
+$count = mysqli_num_rows(mysqli_query($sqlcount));
 $pages = $p->findPages($count, $limit);
-$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 $target = "$filenya?belkd=$belkd&xtgl1=$xtgl1&xbln1=$xbln1&xthn1=$xthn1";
 $pagelist = $p->pageList($_GET['page'], $pages, $target);
-$data = mysql_fetch_array($result);
+$data = mysqli_fetch_array($result);
 
 //require
 require("../../inc/js/jumpmenu.js");
@@ -143,16 +143,16 @@ echo "<select name=\"xthn1\" onChange=\"MM_jumpMenu('self',this,0)\">";
 echo '<option value="'.$xthn1.'" selected>'.$xthn1.'</option>';
 
 //query
-$qthn = mysql_query("SELECT * FROM m_tahun ".
+$qthn = mysqli_query($koneksi, "SELECT * FROM m_tahun ".
 						"ORDER BY tahun DESC");
-$rthn = mysql_fetch_assoc($qthn);
+$rthn = mysqli_fetch_assoc($qthn);
 
 do
 	{
 	$x_thn = nosql($rthn['tahun']);
 	echo '<option value="'.$filenya.'?xtgl1='.$xtgl1.'&xbln1='.$xbln1.'&xthn1='.$x_thn.'">'.$x_thn.'</option>';
 	}
-while ($rthn = mysql_fetch_assoc($qthn));
+while ($rthn = mysqli_fetch_assoc($qthn));
 
 echo '</select>,
 
@@ -160,14 +160,14 @@ No. Faktur : ';
 echo "<select name=\"belkd\" onChange=\"MM_jumpMenu('self',this,0)\">";
 
 //terpilih
-$qtru = mysql_query("SELECT beli.*, beli.kd AS belkd, m_supplier.*  ".
+$qtru = mysqli_query($koneksi, "SELECT beli.*, beli.kd AS belkd, m_supplier.*  ".
 						"FROM beli, m_supplier ".
 						"WHERE beli.kd_supplier = m_supplier.kd ".
 						"AND round(DATE_FORMAT(beli.tgl_beli, '%d')) = '$xtgl1' ".
 						"AND round(DATE_FORMAT(beli.tgl_beli, '%m')) = '$xbln1' ".
 						"AND round(DATE_FORMAT(beli.tgl_beli, '%Y')) = '$xthn1' ".
 						"AND beli.kd = '$belkd'");
-$rtru = mysql_fetch_assoc($qtru);
+$rtru = mysqli_fetch_assoc($qtru);
 $x_belkd = $belkd;
 $x_no_faktur = balikin($rtru['no_faktur']);
 $x_supplier = balikin($rtru['singkatan']);
@@ -180,11 +180,11 @@ $x_tgl_lunas = $rtru['tgl_lunas'];
 $x_kd_byr = nosql($rtru['kd_jns_byr']);
 
 //total sementara
-$qduwi = mysql_query("SELECT SUM(subtotal) AS subtotal ".
+$qduwi = mysqli_query($koneksi, "SELECT SUM(subtotal) AS subtotal ".
 						"FROM beli_detail ".
 						"WHERE kd_beli = '$x_belkd' ".
 						"AND bonus = 'false'");
-$rduwi = mysql_fetch_assoc($qduwi);
+$rduwi = mysqli_fetch_assoc($qduwi);
 $x_total_beli = nosql($rduwi['subtotal']);
 $x_total_diskon = round((($x_diskon * $x_total_beli)/100),2);
 $x_total_bayar = round(nosql($rtru['total_bayar']),2);
@@ -201,16 +201,16 @@ $x_total_bayar = round($x_total_ppn,2);
 
 
 //terpilih --> total item
-$qtru2 = mysql_query("SELECT * FROM beli_detail ".
+$qtru2 = mysqli_query($koneksi, "SELECT * FROM beli_detail ".
 						"WHERE kd_beli = '$belkd'");
-$rtru2 = mysql_fetch_assoc($qtru2);
-$ttru2 = mysql_num_rows($qtru2);
+$rtru2 = mysqli_fetch_assoc($qtru2);
+$ttru2 = mysqli_num_rows($qtru2);
 $x_beli_items = nosql($ttru2);
 
 echo '<option value="'.$x_belkd.'" selected>'.$x_no_faktur.' => '.$x_beli_items.' Item, Supplier : '.$x_supplier.'</option>';
 
 //data
-$qtrux = mysql_query("SELECT beli.*, beli.kd AS belkd, m_supplier.*  ".
+$qtrux = mysqli_query($koneksi, "SELECT beli.*, beli.kd AS belkd, m_supplier.*  ".
 						"FROM beli, m_supplier ".
 						"WHERE beli.kd_supplier = m_supplier.kd ".
 						"AND round(DATE_FORMAT(beli.tgl_beli, '%d')) = '$xtgl1' ".
@@ -218,7 +218,7 @@ $qtrux = mysql_query("SELECT beli.*, beli.kd AS belkd, m_supplier.*  ".
 						"AND round(DATE_FORMAT(beli.tgl_beli, '%Y')) = '$xthn1' ".
 						"AND beli.kd <> '$belkd' ".
 						"ORDER BY round(beli.no_faktur) ASC");
-$rtrux = mysql_fetch_assoc($qtrux);
+$rtrux = mysqli_fetch_assoc($qtrux);
 
 do
 	{
@@ -235,17 +235,17 @@ do
 
 
 	//jumlahnya
-	$qyukx = mysql_query("SELECT * FROM beli_detail ".
+	$qyukx = mysqli_query($koneksi, "SELECT * FROM beli_detail ".
 							"WHERE kd_beli = '$i_belkd' ".
 							"AND bonus = 'false'");
-	$ryukx = mysql_fetch_assoc($qyukx);
-	$tyukx = mysql_num_rows($qyukx);
+	$ryukx = mysqli_fetch_assoc($qyukx);
+	$tyukx = mysqli_num_rows($qyukx);
 	$i_beli_items = $tyukx;
 
 	echo '<option value="'.$filenya.'?xtgl1='.$xtgl1.'&xbln1='.$xbln1.'&xthn1='.$xthn1.'&belkd='.$i_belkd.'">
 	'.$i_no_faktur.' => '.$i_beli_items.' Item, Supplier : '.$i_supplier.'. </option>';
 	}
-while ($rtrux = mysql_fetch_assoc($qtrux));
+while ($rtrux = mysqli_fetch_assoc($qtrux));
 
 echo '</select>
 </td>
@@ -273,10 +273,10 @@ else if (empty($belkd))
 else
 	{
 	//jenis pembayaran
-	$qwow = mysql_query("SELECT * FROM m_jns_byr ".
+	$qwow = mysqli_query($koneksi, "SELECT * FROM m_jns_byr ".
 							"WHERE kd = '$x_kd_byr'");
-	$rwow = mysql_fetch_assoc($qwow);
-	$qwow = mysql_num_rows($qwow);
+	$rwow = mysqli_fetch_assoc($qwow);
+	$qwow = mysqli_num_rows($qwow);
 	$wow_jns = balikin($rwow['jns_byr']);
 
 
@@ -356,7 +356,7 @@ else
 			</td>
 	        </tr>';
 			}
-		while ($data = mysql_fetch_assoc($result));
+		while ($data = mysqli_fetch_assoc($result));
 		}
 	echo '</table>
 	<table width="800" border="0" cellspacing="0" cellpadding="3">

@@ -45,7 +45,7 @@ ob_start();
 
 
 //query
-$qdata = mysql_query("SELECT jual.*, jual_detail.*, m_brg.*, m_brg.nama AS mbnm, ".
+$qdata = mysqli_query($koneksi, "SELECT jual.*, jual_detail.*, m_brg.*, m_brg.nama AS mbnm, ".
 						"m_satuan.*, m_kastumer.*, m_kastumer.singkatan AS kastumer ".
 						"FROM jual, jual_detail, m_brg, m_satuan, m_kastumer ".
 						"WHERE jual.kd = jual_detail.kd_jual ".
@@ -56,8 +56,8 @@ $qdata = mysql_query("SELECT jual.*, jual_detail.*, m_brg.*, m_brg.nama AS mbnm,
 						"AND round(DATE_FORMAT(jual.tgl_jual, '%m')) = '$xbln1' ".
 						"AND round(DATE_FORMAT(jual.tgl_jual, '%Y')) = '$xthn1' ".
 						"ORDER BY jual.tgl_jual ASC");
-$rdata = mysql_fetch_assoc($qdata);
-$tdata = mysql_num_rows($qdata);
+$rdata = mysqli_fetch_assoc($qdata);
+$tdata = mysqli_num_rows($qdata);
 
 //nilai data
 $brg_kode = nosql($rdata['kode']);
@@ -121,7 +121,7 @@ if ($tdata != 0)
 		<td>'.$y_qty.' '.$y_satuan.'</td>
         </tr>';
 		}
-	while ($rdata = mysql_fetch_assoc($qdata));
+	while ($rdata = mysqli_fetch_assoc($qdata));
 	echo '</table>';
 	}
 

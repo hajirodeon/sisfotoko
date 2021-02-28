@@ -47,21 +47,21 @@ $judulku = $judul;
 $judulx = $judul;
 
 //kastumer
-$qsupx = mysql_query("SELECT * FROM m_kastumer ".
+$qsupx = mysqli_query($koneksi, "SELECT * FROM m_kastumer ".
 						"WHERE kd = '$kastkd'");
-$rsupx = mysql_fetch_assoc($qsupx);
+$rsupx = mysqli_fetch_assoc($qsupx);
 $supx_kd = nosql($rsupx['kd']);
 $supx_nm = balikin($rsupx['singkatan']);
 $supx_almt = balikin($rsupx['alamat']);
 
 
 //faktur
-$qtru = mysql_query("SELECT * FROM jual ".
+$qtru = mysqli_query($koneksi, "SELECT * FROM jual ".
 						"WHERE round(DATE_FORMAT(tgl_jual, '%d')) = '$xtgl1' ".
 						"AND round(DATE_FORMAT(tgl_jual, '%m')) = '$xbln1' ".
 						"AND round(DATE_FORMAT(tgl_jual, '%Y')) = '$xthn1' ".
 						"AND kd = '$jukd'");
-$rtru = mysql_fetch_assoc($qtru);
+$rtru = mysqli_fetch_assoc($qtru);
 $x_jukd = $jukd;
 $x_nofak = balikin($rtru['no_faktur']);
 $x_total_jual = nosql($rtru['total_jual']);
@@ -116,7 +116,7 @@ Guna Membayar
 </table>';
 
 //detail item / barang
-$qdata = mysql_query("SELECT jual_detail.*, jual_detail.kd AS bdkd, ".
+$qdata = mysqli_query($koneksi, "SELECT jual_detail.*, jual_detail.kd AS bdkd, ".
 						"stock.*, m_brg.*, m_satuan.* ".
 						"FROM jual_detail, stock, m_brg, m_satuan ".
 						"WHERE jual_detail.kd_brg = m_brg.kd ".
@@ -124,8 +124,8 @@ $qdata = mysql_query("SELECT jual_detail.*, jual_detail.kd AS bdkd, ".
 						"AND stock.kd_brg = m_brg.kd ".
 						"AND jual_detail.kd_jual = '$jukd' ".
 						"ORDER BY m_brg.kode ASC");
-$rdata = mysql_fetch_assoc($qdata);
-$tdata = mysql_num_rows($qdata);
+$rdata = mysqli_fetch_assoc($qdata);
+$tdata = mysqli_num_rows($qdata);
 
 echo '<table width="100%" border="1" cellspacing="0" cellpadding="3">
 <tr bgcolor="'.$warnaheader.'">
@@ -183,7 +183,7 @@ if ($tdata!= "0")
 		<td align="right">'.$d_subtotal.'</td>
 		</tr>';
 		}
-	while ($rdata = mysql_fetch_assoc($qdata));
+	while ($rdata = mysqli_fetch_assoc($qdata));
 	}
 
 echo '</table>

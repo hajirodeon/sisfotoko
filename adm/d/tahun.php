@@ -67,9 +67,9 @@ if ($s == "edit")
 	{
 	$kdx = nosql($_REQUEST['kd']);
 
-	$qx = mysql_query("SELECT * FROM m_tahun ".
+	$qx = mysqli_query($koneksi, "SELECT * FROM m_tahun ".
 						"WHERE kd = '$kdx'");
-	$rowx = mysql_fetch_assoc($qx);
+	$rowx = mysqli_fetch_assoc($qx);
 
 	$tahunx = nosql($rowx['tahun']);
 	}
@@ -97,10 +97,10 @@ if ($_POST['btnSMP'])
 		}
 	else
 		{ ///cek
-		$qcc = mysql_query("SELECT * FROM m_tahun ".
+		$qcc = mysqli_query($koneksi, "SELECT * FROM m_tahun ".
 								"WHERE tahun = '$tahun'");
-		$rcc = mysql_fetch_assoc($qcc);
-		$tcc = mysql_num_rows($qcc);
+		$rcc = mysqli_fetch_assoc($qcc);
+		$tcc = mysqli_num_rows($qcc);
 
 
 		//nek duplikasi, lebih dari 1
@@ -121,7 +121,7 @@ if ($_POST['btnSMP'])
 			//jika update
 			if ($s == "edit")
 				{
-				mysql_query("UPDATE m_tahun SET tahun = '$tahun' ".
+				mysqli_query($koneksi, "UPDATE m_tahun SET tahun = '$tahun' ".
 								"WHERE kd = '$kd'");
 
 				//null-kan
@@ -152,7 +152,7 @@ if ($_POST['btnSMP'])
 					}
 				else
 					{
-					mysql_query("INSERT INTO m_tahun(kd, tahun) VALUES ".
+					mysqli_query($koneksi, "INSERT INTO m_tahun(kd, tahun) VALUES ".
 									"('$x', '$tahun')");
 
 					//null-kan
@@ -185,7 +185,7 @@ if ($_POST['btnHPS'])
 		$kd = nosql($_POST["$yuhu"]);
 
 		//del
-		mysql_query("DELETE FROM m_tahun ".
+		mysqli_query($koneksi, "DELETE FROM m_tahun ".
 						"WHERE kd = '$kd'");
 		}
 
@@ -212,11 +212,11 @@ $sqlcount = "SELECT * FROM m_tahun ".
 				"ORDER BY tahun DESC";
 $sqlresult = $sqlcount;
 
-$count = mysql_num_rows(mysql_query($sqlcount));
+$count = mysqli_num_rows(mysqli_query($sqlcount));
 $pages = $p->findPages($count, $limit);
-$result = mysql_query("$sqlresult LIMIT ".$start.", ".$limit);
+$result = mysqli_query($koneksi, "$sqlresult LIMIT ".$start.", ".$limit);
 $pagelist = $p->pageList($_GET['page'], $pages, $target);
-$data = mysql_fetch_array($result);
+$data = mysqli_fetch_array($result);
 
 
 //require
@@ -271,7 +271,7 @@ if ($count != 0)
 		<td>'.$tahun.'</td>
         </tr>';
 		}
-	while ($data = mysql_fetch_assoc($result));
+	while ($data = mysqli_fetch_assoc($result));
 	}
 
 
